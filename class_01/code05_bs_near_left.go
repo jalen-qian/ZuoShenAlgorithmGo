@@ -21,14 +21,16 @@ func findNearLeft(sortedArr []int, num int) int {
 			l = mid + 1
 		}
 	}
+	// 如果找到的l位置确实 >= num 则l位置即为所求位置
 	if sortedArr[l] >= num {
 		return l
 	}
+	// 否则没找到，返回-1
 	return -1
 }
 
 // findNearLeftOperator 对数器，使用遍历法
-func findNearLeftOperator(sortedArr []int, num int) int {
+func findNearLeftComparator(sortedArr []int, num int) int {
 	if len(sortedArr) == 0 {
 		return -1
 	}
@@ -47,7 +49,7 @@ func main() {
 		rand.Seed(time.Now().UnixNano())
 		// [-20000, 20000]
 		num := rand.Intn(40001) - 20000
-		if findNearLeft(sortedArr, num) != findNearLeftOperator(sortedArr, num) {
+		if findNearLeft(sortedArr, num) != findNearLeftComparator(sortedArr, num) {
 			fmt.Println("Fucking fucked!!!")
 			return
 		}

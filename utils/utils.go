@@ -92,3 +92,30 @@ func GenerateRandomSortedSlice(maxLen int, minNum int, maxStep int) []int {
 	}
 	return result
 }
+
+// GenerateRandomSliceWithoutEqualNeighbor 初始化一个随机切片，并保证相邻的数不相等
+// 	@param maxLen 最大长度
+//  @param minNum 数组成员最小值
+//  @param maxNum 数组成员最大值
+func GenerateRandomSliceWithoutEqualNeighbor(maxLen int, minNum int, maxNum int) []int {
+	if maxLen < 0 || minNum > maxNum {
+		panic("最大长度不可小于0，且最小值不可大于最大值！")
+	}
+	rand.Seed(time.Now().UnixNano())
+	length := rand.Intn(maxLen + 1)
+	result := make([]int, length)
+	// 填充数
+	for i := 0; i < length; i++ {
+		// 假如 minNum和maxNum分别是 -49 100
+		// [0, 149] - 49
+		// [-49, 100]
+		num := rand.Intn(maxNum-minNum+1) + minNum
+		if i > 0 && num == result[i-1] {
+			// 如何和前一个数相等，则随机增加1~100的任意一个值，保证不相等
+			tmp := rand.Intn(101) + 1
+			num += tmp
+		}
+		result[i] = num
+	}
+	return result
+}
