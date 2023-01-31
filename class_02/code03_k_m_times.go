@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"ZuoShenAlgorithmGo/utils"
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 // 在数组中，只有1种数出现了k次，其他数出现了m次，找到出现了k次的数，并返回，如果没有找到，返回-1
 // m > 1, 且 k < m
@@ -25,7 +30,7 @@ import "fmt"
 // 分析复杂度：
 // 1.虽然是双层遍历，但是内部遍历是固定长度32，所以时间复杂度是O(N)
 // 2.只分配了有限几个变量，还有固定32长度的数组，额外空间复杂度O(1)
-func onlyKTimes(arr []int32, k int32, m int32) int {
+func onlyKTimes(arr []int32, k int32, m int32) int32 {
 	// 用于记录数组中的数字每位上1的个数
 	t := make([]int32, 32)
 	for _, num := range arr {
@@ -38,21 +43,98 @@ func onlyKTimes(arr []int32, k int32, m int32) int {
 			t[i] += (num >> i) & 1
 		}
 	}
-	result := 0
+	var result int32
 	for i := 0; i < 32; i++ {
 		// 如果取模不是0，说明这个数在第i位是1
-		if t[i]%m != 0 {
-			result = (result << 1) | 1
-		}
+		result = (result << 1) | (t[i] % m)
 	}
 	// 上面的流程忽略了出现k次的数本身就是0的情况，因为如果这个数是0，则t中每个数必能被m整除
 
 	return result
 }
 
+// 对数器对比函数，使用map来做词频统计
+func test(arr []int32, k int32, m int32) int32 {
+	countMap := make(map[int32]int)
+	for _, num := range arr {
+		if _, ok := countMap[num]; ok {
+			countMap[num]++
+		} else {
+			countMap[num] = 1
+		}
+	}
+	for num, count := range countMap {
+		if count == int(k) {
+			return num
+		}
+	}
+	return -1
+}
+
+// 初始化一个符合要求的数组
+// maxM m参数的最大值 [2, maxM]
+// maxMSize 出现m次的数最多有多少种
+// maxNum 数组中的数字的取值范围 [-maxNum, maxNum]
+func generateArray(maxM int32, maxMSize int32, maxNum int32) ([]int32, int32, int32) {
+	rand.Seed(time.Now().UnixNano())
+	// 随机产生一个m
+	m := rand.Int31n(maxM-1) + 2 // [2, maxM]
+	// 随机产生一个k，保证k < m 且 k > 0
+	k := m - (rand.Int31n(m-1) + 1)      // [1,m-1] , m - [1,m-1] 范围是[1, m-1]，一定比m小，且 >= 1
+	mSize := rand.Int31n(maxMSize+1) + 1 // [1, maxMSize]
+	// 数组长度
+	arrLen := mSize*m + k
+	arr := make([]int32, arrLen)
+	// 填数字，先填个数为k的数字
+	kNum := utils.GenerateRandInt32(maxNum) // [-maxNum, maxNum]
+	var i int32                             // i标记当前正在填入的索引
+	for ; i < k; i++ {
+		arr[i] = kNum
+	}
+	// 循环产生个数为m的数字，并填入
+	for j := int32(0); j < mSize; j++ {
+		mNum := utils.GenerateRandInt32(maxNum)
+		// 如果正好和K数字撞车了，就-1，保证不撞车
+		if mNum == kNum {
+			mNum--
+		}
+		// 填入数组中，填m次
+		for n := int32(0); n < m; n++ {
+			arr[i] = mNum
+			i++
+		}
+	}
+	// 最后，将数组中的数字顺序打乱
+	for i = 0; i < arrLen; i++ {
+		// [0, arrLen-1]中随机找一个位置交换
+		swapArr(arr, i, rand.Int31n(arrLen))
+	}
+	return arr, k, m
+}
+
+func swapArr(arr []int32, i, j int32) {
+	tmp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = tmp
+}
+
 func main() {
 	// 1. 进行简单测试，假设 3 出现 两次，5 8 7都出现3次
-	arr := []int32{5, 0, 8, 7, 8, 0, 5, 7, 8, 9, 5, 9, 7, 9}
-	rst := onlyKTimes(arr, 2, 3)
-	fmt.Printf("结果为：%d\n", rst)
+	arr := []int32{52, 71, 71}
+	rst := onlyKTimes(arr, 1, 2)
+	fmt.Printf("简单测试结果为：%d\n", rst)
+	// 2. 对数器测试
+	rand.Seed(time.Now().UnixNano())
+	testTimes := 100000
+	for i := 0; i < testTimes; i++ {
+		arr, k, m := generateArray(5, 10, 100)
+		rst := onlyKTimes(arr, k, m)
+		rstForTest := test(arr, k, m)
+		if rst != rstForTest {
+			fmt.Printf("出错了，输出结果：%d, 对数器结果：%d\n", rst, rstForTest)
+			fmt.Printf("数组为：%v, k是%d, m是%d\n", arr, k, m)
+			return
+		}
+	}
+	fmt.Println("测试通过！！！")
 }

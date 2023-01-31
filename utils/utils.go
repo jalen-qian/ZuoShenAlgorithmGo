@@ -119,3 +119,8 @@ func GenerateRandomSliceWithoutEqualNeighbor(maxLen int, minNum int, maxNum int)
 	}
 	return result
 }
+
+// GenerateRandInt32 生成随机的int32整数，取值范围 [-maxNum, maxNum]
+func GenerateRandInt32(maxNum int32) int32 {
+	return rand.Int31n(maxNum + 1)
+}
