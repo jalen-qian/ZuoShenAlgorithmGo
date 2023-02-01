@@ -26,10 +26,13 @@ import (
 //  1. 定义一个32位的数组，初始值都是0
 //  2. 循环给定数组中的数，并循环32次将这个数右移i位并与上1（i为当前循环到第i次），得到的1则累加到32位数组中（统计每位上1的个数）
 //  3. 定义一个结果数 rst ，初始为0
-//  4. 遍历32位数组，每一位与m做取模运算，如果是0，则将rst左移，并或上1
+//  4. 遍历32位数组，每一位与m做取模运算，如果不是0，则将 rst |= 1 << i (i是当前循环的位)
 // 分析复杂度：
 // 1.虽然是双层遍历，但是内部遍历是固定长度32，所以时间复杂度是O(N)
 // 2.只分配了有限几个变量，还有固定32长度的数组，额外空间复杂度O(1)
+
+// 扩展：改一下题目，如果题目是其他数都出现m次，剩下一种数不一定出现k次，但是出现的次数肯定小于m
+// 如果正好出现k次，则返回这个数，如果没有出现k次，则返回-1，题目要怎么改？
 func onlyKTimes(arr []int32, k int32, m int32) int32 {
 	// 用于记录数组中的数字每位上1的个数
 	t := make([]int32, 32)
@@ -45,10 +48,33 @@ func onlyKTimes(arr []int32, k int32, m int32) int32 {
 	}
 	var result int32
 	for i := 0; i < 32; i++ {
-		// 如果取模不是0，说明这个数在第i位是1
-		result = (result << 1) | (t[i] % m)
+		// 如果是m的整数倍，说明第i位上是0，跳过
+		if t[i]%m == 0 {
+			continue
+		}
+		// 如果取模之后是k，说明正好出现k次，则或进去
+		if t[i]%m == k {
+			result |= 1 << i
+		} else {
+			// 否则，说明一定没有出现k次，直接返回-1
+			return -1
+		}
 	}
-	// 上面的流程忽略了出现k次的数本身就是0的情况，因为如果这个数是0，则t中每个数必能被m整除
+	// 假如输入的数组中，0出现了3次，其他数出现了5次，但是k = 2, m=5
+	// 按照题目，应该返回-1，但是由于0的二进制没有1，所以t数组每一位都是必然被m整除的
+	// 导致一定会一直进入上面的 continue，最终返回0，实际应该返回-1
+	// 如果结果是0，判断0是否真的出现了k次，如果不是，则返回-1
+	if result == 0 {
+		var count0 int32
+		for _, num := range arr {
+			if num == 0 {
+				count0++
+			}
+		}
+		if count0 != k {
+			return -1
+		}
+	}
 
 	return result
 }
@@ -85,15 +111,26 @@ func generateArray(maxM int32, maxMSize int32, maxNum int32) ([]int32, int32, in
 	// 数组长度
 	arrLen := mSize*m + k
 	arr := make([]int32, arrLen)
-	// 填数字，先填个数为k的数字
+	// 填数字，个数为k的数字
 	kNum := utils.GenerateRandInt32(maxNum) // [-maxNum, maxNum]
 	var i int32                             // i标记当前正在填入的索引
 	for ; i < k; i++ {
 		arr[i] = kNum
 	}
+	// 定义一个map，用来统计一个数是否被加入过
+	numMap := make(map[int32]int)
+	numMap[kNum] = 0
 	// 循环产生个数为m的数字，并填入
 	for j := int32(0); j < mSize; j++ {
-		mNum := utils.GenerateRandInt32(maxNum)
+		var mNum int32
+		// 不断生成数，如果加入过，就重新生成
+		for {
+			mNum = utils.GenerateRandInt32(maxNum)
+			if _, ok := numMap[mNum]; !ok {
+				break
+			}
+		}
+		numMap[mNum] = -1
 		// 如果正好和K数字撞车了，就-1，保证不撞车
 		if mNum == kNum {
 			mNum--
@@ -103,6 +140,10 @@ func generateArray(maxM int32, maxMSize int32, maxNum int32) ([]int32, int32, in
 			arr[i] = mNum
 			i++
 		}
+	}
+	// 数组中实际有一个数出现了k次，根据扩展思考的题目要求，保证50%的概率返回k，50%的概率不返回k
+	if rand.Float64() < 0.5 {
+		k = m - (rand.Int31n(m-1) + 1)
 	}
 	// 最后，将数组中的数字顺序打乱
 	for i = 0; i < arrLen; i++ {
@@ -119,15 +160,12 @@ func swapArr(arr []int32, i, j int32) {
 }
 
 func main() {
-	// 1. 进行简单测试，假设 3 出现 两次，5 8 7都出现3次
-	arr := []int32{52, 71, 71}
-	rst := onlyKTimes(arr, 1, 2)
-	fmt.Printf("简单测试结果为：%d\n", rst)
-	// 2. 对数器测试
+	// 对数器测试
 	rand.Seed(time.Now().UnixNano())
 	testTimes := 100000
+	fmt.Println("开始测试！！！")
 	for i := 0; i < testTimes; i++ {
-		arr, k, m := generateArray(5, 10, 100)
+		arr, k, m := generateArray(100, 20, 1000)
 		rst := onlyKTimes(arr, k, m)
 		rstForTest := test(arr, k, m)
 		if rst != rstForTest {
