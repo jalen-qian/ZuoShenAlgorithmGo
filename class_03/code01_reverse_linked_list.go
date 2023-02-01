@@ -9,23 +9,17 @@ import (
 func reverseLinkedList(head *utils.Node) *utils.Node {
 	var pre *utils.Node
 	var next *utils.Node
-	cur := head
-	for cur != nil {
+	for head != nil {
 		// 先记住下一个节点的位置
-		next = cur.Next
+		next = head.Next
 		// 当前节点往前指
-		cur.Next = pre
+		head.Next = pre
 		// pre来到当前节点
-		pre = cur
-		// 如果没有下一个节点了，head就定下来
-		if next == nil {
-			head = cur
-		}
+		pre = head
 		// 当前节点往下一个节点跳
-		cur = next
-
+		head = next
 	}
-	return head
+	return pre
 }
 
 // test 构造一个新的单向链表，是原始链表反转的形式
