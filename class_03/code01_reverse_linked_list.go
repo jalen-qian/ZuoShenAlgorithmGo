@@ -22,8 +22,8 @@ func reverseLinkedList(head *utils.Node) *utils.Node {
 	return pre
 }
 
-// test 构造一个新的单向链表，是原始链表反转的形式
-func test(head *utils.Node) *utils.Node {
+// testReverseLinkedList 构造一个新的单向链表，是原始链表反转的形式
+func testReverseLinkedList(head *utils.Node) *utils.Node {
 	if head == nil {
 		return nil
 	}
@@ -44,58 +44,15 @@ func test(head *utils.Node) *utils.Node {
 	return newHead
 }
 
-func copyLinkedList(node *utils.Node) *utils.Node {
-	if node == nil {
-		return nil
-	}
-	newNode := &utils.Node{Value: node.Value}
-	oldCur := node
-	newCur := newNode
-	for oldCur.Next != nil {
-		newCur.Next = &utils.Node{Value: oldCur.Next.Value}
-		oldCur = oldCur.Next
-		newCur = newCur.Next
-	}
-	return newNode
-}
-
-// checkLinkedListEqual 校验两个链表是否全等
-// 全等条件：长度相同，且每个位置的值相同
-// 如果一个为nil，则另一个也必须为nil
-func checkLinkedListEqual(head1 *utils.Node, head2 *utils.Node) bool {
-	if head1 == nil && head2 != nil {
-		return false
-	}
-	if head1 != nil && head2 == nil {
-		return false
-	}
-	if head1 == nil && head2 == nil {
-		return true
-	}
-	cur1 := head1
-	cur2 := head2
-	for cur1 != nil {
-		if cur2 == nil {
-			return false
-		}
-		if cur1.Value != cur2.Value {
-			return false
-		}
-		cur1 = cur1.Next
-		cur2 = cur2.Next
-	}
-	return true
-}
-
 func main() {
 	testTimes := 100000
 	for i := 0; i < testTimes; i++ {
 		// 测试方式：反转两次，测试反转后的结果是否与原始链表全等
 		linkedList := utils.GenerateRandomLinkedList(1000, -100, 100)
-		copyList := copyLinkedList(linkedList)
+		copyList := utils.CopyLinkedList(linkedList)
 		reversedList := reverseLinkedList(linkedList)
-		reversedList2 := test(copyList)
-		if !checkLinkedListEqual(reversedList, reversedList2) {
+		reversedList2 := testReverseLinkedList(copyList)
+		if !utils.CheckLinkedListEqual(reversedList, reversedList2) {
 			fmt.Println("Fucking fucked!!!")
 			fmt.Printf("原始链表：%s\n", utils.SPrintLinkedList(copyList))
 			fmt.Printf("反转链表：%s\n", utils.SPrintLinkedList(reversedList))

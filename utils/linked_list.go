@@ -12,7 +12,7 @@ type Node struct {
 	Next  *Node
 }
 
-func genNodeValue(minValue int, maxValue int) int {
+func GenNodeValue(minValue int, maxValue int) int {
 	return rand.Intn(maxValue-minValue+1) + minValue
 }
 
@@ -25,11 +25,11 @@ func GenerateRandomLinkedList(maxLength int, minValue int, maxValue int) *Node {
 		return nil
 	}
 	// 先构造一个头节点
-	head := &Node{Value: genNodeValue(minValue, maxValue)}
+	head := &Node{Value: GenNodeValue(minValue, maxValue)}
 	cur := head
 	// 还剩length-1个节点
 	for i := 1; i < length; i++ {
-		value := genNodeValue(minValue, maxValue)
+		value := GenNodeValue(minValue, maxValue)
 		cur.Next = &Node{Value: value}
 		cur = cur.Next
 	}
@@ -45,11 +45,70 @@ func SPrintLinkedList(head *Node) string {
 	// 遍历链表
 	ans := "{"
 	for cur != nil {
-		ans += fmt.Sprintf("%d->", cur.Value)
+		ans += fmt.Sprintf("%d -> ", cur.Value)
 		cur = cur.Next
 	}
 	ans += "null}"
 	return ans
+}
+
+// CopyLinkedList 拷贝一个一模一样的链表
+func CopyLinkedList(node *Node) *Node {
+	if node == nil {
+		return nil
+	}
+	newNode := &Node{Value: node.Value}
+	oldCur := node
+	newCur := newNode
+	for oldCur.Next != nil {
+		newCur.Next = &Node{Value: oldCur.Next.Value}
+		oldCur = oldCur.Next
+		newCur = newCur.Next
+	}
+	return newNode
+}
+
+// CheckLinkedListEqual 校验两个链表是否全等
+// 全等条件：长度相同，且每个位置的值相同
+// 如果一个为nil，则另一个也必须为nil
+func CheckLinkedListEqual(head1 *Node, head2 *Node) bool {
+	if head1 == nil && head2 != nil {
+		return false
+	}
+	if head1 != nil && head2 == nil {
+		return false
+	}
+	if head1 == nil && head2 == nil {
+		return true
+	}
+	cur1 := head1
+	cur2 := head2
+	for cur1 != nil {
+		if cur2 == nil {
+			return false
+		}
+		if cur1.Value != cur2.Value {
+			return false
+		}
+		cur1 = cur1.Next
+		cur2 = cur2.Next
+	}
+	return true
+}
+
+func GenerateLinkedListBySlice(arr []int) *Node {
+	if len(arr) == 0 {
+		return nil
+	}
+	head := &Node{Value: arr[0]}
+	cur := head
+	for i := 1; i < len(arr); i++ {
+		cur.Next = &Node{
+			Value: arr[i],
+		}
+		cur = cur.Next
+	}
+	return head
 }
 
 // DoubleNode 双向链表
@@ -68,11 +127,11 @@ func GenerateRandomDoubleList(maxLength int, minValue int, maxValue int) *Double
 		return nil
 	}
 	// 先构造一个头节点
-	head := &DoubleNode{Value: genNodeValue(minValue, maxValue)}
+	head := &DoubleNode{Value: GenNodeValue(minValue, maxValue)}
 	cur := head
 	// 还剩length-1个节点
 	for i := 1; i < length; i++ {
-		value := genNodeValue(minValue, maxValue)
+		value := GenNodeValue(minValue, maxValue)
 		cur.Next = &DoubleNode{Value: value, Last: cur}
 		cur = cur.Next
 	}
