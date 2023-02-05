@@ -195,7 +195,44 @@ func (s *MyStackWithLinkedList[T]) Peek() T {
 
 var _ IStack[any] = (*MyStackWithLinkedList[any])(nil)
 
-// 使用切片实现一个栈
+// MyStackWithSlice 使用切片实现栈
+type MyStackWithSlice[T any] struct {
+	items []T
+}
+
+func (q *MyStackWithSlice[T]) Push(value T) {
+	// 入栈很简单，往后面拼接就好了
+	q.items = append(q.items, value)
+}
+
+// Pop 出栈
+func (q *MyStackWithSlice[T]) Pop() T {
+	var ans T
+	// 如果栈是空的，则直接返回
+	if q.IsEmpty() {
+		return ans
+	}
+	// 删除切片最后一个元素并返回
+	ans = q.items[len(q.items)-1]
+	q.items = q.items[0 : len(q.items)-1]
+	return ans
+}
+
+func (q *MyStackWithSlice[T]) IsEmpty() bool {
+	return len(q.items) == 0
+}
+
+func (q *MyStackWithSlice[T]) Size() int {
+	return len(q.items)
+}
+
+func (q *MyStackWithSlice[T]) Peek() T {
+	var ans T
+	if q.IsEmpty() {
+		return ans
+	}
+	return q.items[0]
+}
 
 func main() {
 	fmt.Println("测试开始")
@@ -229,6 +266,36 @@ func main() {
 					ans2 := queue2.Poll()
 					if ans1 != ans2 {
 						fmt.Printf("出错了，队列1弹出%d,队列2弹出%d\n", ans1, ans2)
+						return
+					}
+				}
+			}
+		}
+
+		// 创建栈，使用int类型
+		stack1 := &MyStackWithLinkedList[int]{}
+		stack2 := &MyStackWithSlice[int]{}
+		for j := 0; j < oneTestOperatorNum; j++ {
+			// 随机生成一个数
+			value := rand.Intn(1001) - rand.Intn(1001) // [-1000, 1000]
+			// 如果栈是空的，则必然入栈
+			if stack1.IsEmpty() {
+				// 同时入栈
+				stack1.Push(value)
+				stack2.Push(value)
+			} else {
+				// 栈不是空的，则50%的概率决定是入栈还是弹出
+				p := rand.Float32()
+				if p < 0.5 {
+					// 同时入栈
+					stack1.Push(value)
+					stack2.Push(value)
+				} else {
+					// 同时弹出，并判断弹出的数是否相同
+					ans1 := stack1.Pop()
+					ans2 := stack2.Pop()
+					if ans1 != ans2 {
+						fmt.Printf("出错了，栈1弹出%d,栈2弹出%d\n", ans1, ans2)
 						return
 					}
 				}
