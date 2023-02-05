@@ -8,35 +8,27 @@ import (
 )
 
 // 题目2：删除链表中给定的数
-func deleteNumberInLinkedList(head *utils.Node, number int) *utils.Node {
-	if head == nil {
-		return nil
-	}
+func deleteNumberInLinkedList(head *utils.Node, value int) *utils.Node {
 	// 1. 找到第一个不等于number的节点作为头结点，并将前面的节点都释放
-	cur := head
-	for head != nil && head.Value == number {
-		// head跳下一个
+	for head != nil {
+		if head.Value != value {
+			break
+		}
 		head = head.Next
-		cur.Next = nil
-		cur = head
-	}
-	if head == nil {
-		return nil
 	}
 	// 2. 接下来的链表中，如果遇到number，则删除
+	// pre 和 cur都来到head的位置，head肯定不等于value
 	pre := head
-	cur = head.Next
+	cur := head
 	for cur != nil {
-		if cur.Value == number {
-			cur = cur.Next
-			continue
+		// 如果cur的值是给定的value，则跳过
+		if cur.Value == value {
+			pre.Next = cur.Next
+		} else {
+			// pre来到cur的位置
+			pre = cur
 		}
-		// 找到了不是number的节点
-		// pre的下一个直接指向这个节点
-		pre.Next = cur
-		// pre来到当前位置
-		pre = cur
-		// 往下一个条
+		// cur往下一个条
 		cur = cur.Next
 	}
 	return head
@@ -93,7 +85,7 @@ func main() {
 	ans1 := testDeleteNumberInLinkedList(head, 2)
 	fmt.Println(utils.SPrintLinkedList(ans1))
 	// 测试，使用对数器测试一百万次
-	testTimes := 1000000
+	testTimes := 200000
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < testTimes; i++ {
 		// 初始化一个随机链表
