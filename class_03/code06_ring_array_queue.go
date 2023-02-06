@@ -16,6 +16,7 @@ type IQueueErr[T any] interface {
 	Peek() T          // 只返回队尾的值，不实际弹出
 }
 
+// RingArrayQueue 环形数组实现的队列
 type RingArrayQueue[T any] struct {
 	items     []T // 数组
 	size      int // 队列大小
