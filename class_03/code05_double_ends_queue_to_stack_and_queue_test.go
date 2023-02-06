@@ -46,34 +46,34 @@ func TestMyQueueAndStack(t *testing.T) {
 		}
 
 		// 创建栈，使用int类型
-		//stack1 := &MyStackWithLinkedList[int]{}
-		//stack2 := &MyStackWithSlice[int]{}
-		//for j := 0; j < oneTestOperatorNum; j++ {
-		//	// 随机生成一个数
-		//	value := rand.Intn(1001) - rand.Intn(1001) // [-1000, 1000]
-		//	// 如果栈是空的，则必然入栈
-		//	if stack1.IsEmpty() {
-		//		// 同时入栈
-		//		stack1.Push(value)
-		//		stack2.Push(value)
-		//	} else {
-		//		// 栈不是空的，则50%的概率决定是入栈还是弹出
-		//		p := rand.Float32()
-		//		if p < 0.5 {
-		//			// 同时入栈
-		//			stack1.Push(value)
-		//			stack2.Push(value)
-		//		} else {
-		//			// 同时弹出，并判断弹出的数是否相同
-		//			ans1 := stack1.Pop()
-		//			ans2 := stack2.Pop()
-		//			if ans1 != ans2 {
-		//				fmt.Printf("出错了，栈1弹出%d,栈2弹出%d\n", ans1, ans2)
-		//				return
-		//			}
-		//		}
-		//	}
-		//}
+		stack1 := NewMyStack[int]()
+		stack2 := &MyStackWithLinkedList[int]{}
+		for j := 0; j < oneTestOperatorNum; j++ {
+			// 随机生成一个数
+			value := rand.Intn(1001) - rand.Intn(1001) // [-1000, 1000]
+			// 如果栈是空的，则必然入栈
+			if stack1.IsEmpty() {
+				// 同时入栈
+				stack1.Push(value)
+				stack2.Push(value)
+			} else {
+				// 栈不是空的，则50%的概率决定是入栈还是弹出
+				p := rand.Float32()
+				if p < 0.5 {
+					// 同时入栈
+					stack1.Push(value)
+					stack2.Push(value)
+				} else {
+					// 同时弹出，并判断弹出的数是否相同
+					ans1 := stack1.Pop()
+					ans2 := stack2.Pop()
+					if ans1 != ans2 {
+						fmt.Printf("出错了，栈1弹出%d,栈2弹出%d\n", ans1, ans2)
+						return
+					}
+				}
+			}
+		}
 	}
 	fmt.Println("测试结束")
 }

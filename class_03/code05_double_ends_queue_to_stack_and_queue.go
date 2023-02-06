@@ -148,3 +148,40 @@ func (q *MyQueue[T]) Peek() T {
 }
 
 var _ IQueue[any] = (*MyQueue[any])(nil)
+
+// MyStack 使用双向队列实现栈
+type MyStack[T any] struct {
+	doubleEndsQueue *DoubleEndsQueue[T]
+}
+
+// NewMyStack 构造函数
+func NewMyStack[T any]() *MyStack[T] {
+	return &MyStack[T]{
+		doubleEndsQueue: &DoubleEndsQueue[T]{},
+	}
+}
+
+func (s *MyStack[T]) Push(value T) {
+	// 入队从头入
+	s.doubleEndsQueue.AddFromHead(value)
+}
+
+func (s *MyStack[T]) Pop() T {
+	// 出队也从头部出
+	return s.doubleEndsQueue.PopFromHead()
+}
+
+func (s *MyStack[T]) IsEmpty() bool {
+	return s.doubleEndsQueue.IsEmpty()
+}
+
+func (s *MyStack[T]) Size() int {
+	return s.doubleEndsQueue.size
+}
+
+func (s *MyStack[T]) Peek() T {
+	// 返回队列头部的值
+	return s.doubleEndsQueue.PeekFromHead()
+}
+
+var _ IStack[any] = (*MyStack[any])(nil)
