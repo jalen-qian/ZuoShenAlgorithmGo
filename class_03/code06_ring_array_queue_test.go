@@ -16,7 +16,7 @@ func TestRingArrayQueue(t *testing.T) {
 	queueLimit := 10
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < testTimes; i++ {
-		// 创建一个队列，确定泛型类型为int类型，将使用双向队列实现的，和单链表实现的做对比
+		// 创建一个队列，确定泛型类型为int类型，将使用环状数组实现的，和单链表实现的做对比
 		queue1 := NewRingArrayQueue[int](10)
 		queue2 := &MyQueueWithLinkedList[int]{}
 		for j := 0; j < oneTestOperatorNum; j++ {

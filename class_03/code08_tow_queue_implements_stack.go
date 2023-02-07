@@ -19,8 +19,8 @@ help
 */
 
 type TwoQueueStack[T any] struct {
-	queue *MyQueue[T]
-	help  *MyQueue[T]
+	queue IQueue[T]
+	help  IQueue[T]
 }
 
 func (s *TwoQueueStack[T]) Push(value T) {
