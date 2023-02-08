@@ -1,13 +1,9 @@
 package main
 
-import (
-	"ZuoShenAlgorithmGo/utils"
-)
-
 // reverseLinkedList 反转单向链表
-func reverseLinkedList(head *utils.Node) *utils.Node {
-	var pre *utils.Node
-	var next *utils.Node
+func reverseLinkedList(head *ListNode) *ListNode {
+	var pre *ListNode
+	var next *ListNode
 	for head != nil {
 		// 先记住下一个节点的位置
 		next = head.Next
@@ -22,7 +18,7 @@ func reverseLinkedList(head *utils.Node) *utils.Node {
 }
 
 // testReverseLinkedList 构造一个新的单向链表，是原始链表反转的形式
-func testReverseLinkedList(head *utils.Node) *utils.Node {
+func testReverseLinkedList(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
 	}
@@ -34,10 +30,10 @@ func testReverseLinkedList(head *utils.Node) *utils.Node {
 		cur = cur.Next
 	}
 	// 反向构造
-	newHead := &utils.Node{Value: arr[len(arr)-1]}
+	newHead := &ListNode{Value: arr[len(arr)-1]}
 	cur = newHead
 	for i := len(arr) - 2; i >= 0; i-- {
-		cur.Next = &utils.Node{Value: arr[i]}
+		cur.Next = &ListNode{Value: arr[i]}
 		cur = cur.Next
 	}
 	return newHead

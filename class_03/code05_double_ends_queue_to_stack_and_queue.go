@@ -16,7 +16,7 @@ type IDoubleEndsQueue[T any] interface {
 	PeekFromBottom() T     // 返回尾部的值，但是不弹出
 }
 
-// DoubleNode 双链表
+// ListDoubleNode 双链表
 type DoubleNode[T any] struct {
 	value T
 	next  *DoubleNode[T]

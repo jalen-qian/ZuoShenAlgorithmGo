@@ -1,15 +1,11 @@
 package main
 
-import (
-	"ZuoShenAlgorithmGo/utils"
-)
-
-func reverseDoubleList(head *utils.DoubleNode) *utils.DoubleNode {
+func reverseDoubleList(head *ListDoubleNode) *ListDoubleNode {
 	if head == nil {
 		return nil
 	}
-	var pre *utils.DoubleNode
-	var next *utils.DoubleNode
+	var pre *ListDoubleNode
+	var next *ListDoubleNode
 	for head != nil {
 		// 先记住下一个节点
 		next = head.Next

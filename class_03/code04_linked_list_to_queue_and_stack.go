@@ -4,7 +4,7 @@ package main
 使用单链表实现栈和队列
 */
 
-// Node 单链表节点，使用泛型，value可以接收任意类型
+// ListNode 单链表节点，使用泛型，value可以接收任意类型
 type Node[T any] struct {
 	value T
 	next  *Node[T]

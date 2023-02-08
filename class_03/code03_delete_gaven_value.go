@@ -1,11 +1,7 @@
 package main
 
-import (
-	"ZuoShenAlgorithmGo/utils"
-)
-
 // 题目2：删除链表中给定的数
-func deleteNumberInLinkedList(head *utils.Node, value int) *utils.Node {
+func deleteNumberInLinkedList(head *ListNode, value int) *ListNode {
 	// 1. 找到第一个不等于number的节点作为头结点，并将前面的节点都释放
 	for head != nil {
 		if head.Value != value {
@@ -32,9 +28,9 @@ func deleteNumberInLinkedList(head *utils.Node, value int) *utils.Node {
 }
 
 // testDeleteNumberInLinkedList 对数器，分配额外的空间来实现
-func testDeleteNumberInLinkedList(head *utils.Node, number int) *utils.Node {
+func testDeleteNumberInLinkedList(head *ListNode, number int) *ListNode {
 	// 1. 生成一个节点数组
-	nodeArr := make([]*utils.Node, 0)
+	nodeArr := make([]*ListNode, 0)
 	// 2. 将链表中的节点填入数组中
 	cur := head
 	for cur != nil {
@@ -49,7 +45,7 @@ func testDeleteNumberInLinkedList(head *utils.Node, number int) *utils.Node {
 	}
 	// 4. 将节点重新连接起来
 	var foundHead bool
-	var pre *utils.Node
+	var pre *ListNode
 	nilCount := 0
 	for _, node := range nodeArr {
 		// 值为空了，说明是number被删除掉了，则跳过

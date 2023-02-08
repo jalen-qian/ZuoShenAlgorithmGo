@@ -1,4 +1,4 @@
-package utils
+package main
 
 import (
 	"fmt"
@@ -6,10 +6,10 @@ import (
 	"time"
 )
 
-// Node 单向链表
-type Node struct {
+// ListNode 单向链表
+type ListNode struct {
 	Value int
-	Next  *Node
+	Next  *ListNode
 }
 
 func GenNodeValue(minValue int, maxValue int) int {
@@ -17,7 +17,7 @@ func GenNodeValue(minValue int, maxValue int) int {
 }
 
 // GenerateRandomLinkedList 初始化一个随机的链表
-func GenerateRandomLinkedList(maxLength int, minValue int, maxValue int) *Node {
+func GenerateRandomLinkedList(maxLength int, minValue int, maxValue int) *ListNode {
 	rand.Seed(time.Now().UnixNano())
 	length := rand.Intn(maxLength + 1)
 	// 如果长度是0，则返回空链表
@@ -25,19 +25,19 @@ func GenerateRandomLinkedList(maxLength int, minValue int, maxValue int) *Node {
 		return nil
 	}
 	// 先构造一个头节点
-	head := &Node{Value: GenNodeValue(minValue, maxValue)}
+	head := &ListNode{Value: GenNodeValue(minValue, maxValue)}
 	cur := head
 	// 还剩length-1个节点
 	for i := 1; i < length; i++ {
 		value := GenNodeValue(minValue, maxValue)
-		cur.Next = &Node{Value: value}
+		cur.Next = &ListNode{Value: value}
 		cur = cur.Next
 	}
 	return head
 }
 
 // SPrintLinkedList 打印链表
-func SPrintLinkedList(head *Node) string {
+func SPrintLinkedList(head *ListNode) string {
 	if head == nil {
 		return "null"
 	}
@@ -53,15 +53,15 @@ func SPrintLinkedList(head *Node) string {
 }
 
 // CopyLinkedList 拷贝一个一模一样的链表
-func CopyLinkedList(node *Node) *Node {
+func CopyLinkedList(node *ListNode) *ListNode {
 	if node == nil {
 		return nil
 	}
-	newNode := &Node{Value: node.Value}
+	newNode := &ListNode{Value: node.Value}
 	oldCur := node
 	newCur := newNode
 	for oldCur.Next != nil {
-		newCur.Next = &Node{Value: oldCur.Next.Value}
+		newCur.Next = &ListNode{Value: oldCur.Next.Value}
 		oldCur = oldCur.Next
 		newCur = newCur.Next
 	}
@@ -71,7 +71,7 @@ func CopyLinkedList(node *Node) *Node {
 // CheckLinkedListEqual 校验两个链表是否全等
 // 全等条件：长度相同，且每个位置的值相同
 // 如果一个为nil，则另一个也必须为nil
-func CheckLinkedListEqual(head1 *Node, head2 *Node) bool {
+func CheckLinkedListEqual(head1 *ListNode, head2 *ListNode) bool {
 	if head1 == nil && head2 != nil {
 		return false
 	}
@@ -96,14 +96,14 @@ func CheckLinkedListEqual(head1 *Node, head2 *Node) bool {
 	return true
 }
 
-func GenerateLinkedListBySlice(arr []int) *Node {
+func GenerateLinkedListBySlice(arr []int) *ListNode {
 	if len(arr) == 0 {
 		return nil
 	}
-	head := &Node{Value: arr[0]}
+	head := &ListNode{Value: arr[0]}
 	cur := head
 	for i := 1; i < len(arr); i++ {
-		cur.Next = &Node{
+		cur.Next = &ListNode{
 			Value: arr[i],
 		}
 		cur = cur.Next
@@ -111,15 +111,15 @@ func GenerateLinkedListBySlice(arr []int) *Node {
 	return head
 }
 
-// DoubleNode 双向链表
-type DoubleNode struct {
+// ListDoubleNode 双向链表
+type ListDoubleNode struct {
 	Value int
-	Last  *DoubleNode
-	Next  *DoubleNode
+	Last  *ListDoubleNode
+	Next  *ListDoubleNode
 }
 
 // GenerateRandomDoubleList 初始化一个随机的双向链表
-func GenerateRandomDoubleList(maxLength int, minValue int, maxValue int) *DoubleNode {
+func GenerateRandomDoubleList(maxLength int, minValue int, maxValue int) *ListDoubleNode {
 	rand.Seed(time.Now().UnixNano())
 	length := rand.Intn(maxLength + 1)
 	// 如果长度是0，则返回空链表
@@ -127,27 +127,27 @@ func GenerateRandomDoubleList(maxLength int, minValue int, maxValue int) *Double
 		return nil
 	}
 	// 先构造一个头节点
-	head := &DoubleNode{Value: GenNodeValue(minValue, maxValue)}
+	head := &ListDoubleNode{Value: GenNodeValue(minValue, maxValue)}
 	cur := head
 	// 还剩length-1个节点
 	for i := 1; i < length; i++ {
 		value := GenNodeValue(minValue, maxValue)
-		cur.Next = &DoubleNode{Value: value, Last: cur}
+		cur.Next = &ListDoubleNode{Value: value, Last: cur}
 		cur = cur.Next
 	}
 	return head
 }
 
 // CopyDoubleList 拷贝双向链表
-func CopyDoubleList(head *DoubleNode) *DoubleNode {
+func CopyDoubleList(head *ListDoubleNode) *ListDoubleNode {
 	if head == nil {
 		return nil
 	}
-	newHead := &DoubleNode{Value: head.Value}
+	newHead := &ListDoubleNode{Value: head.Value}
 	oldCur := head
 	newCur := newHead
 	for oldCur.Next != nil {
-		newCur.Next = &DoubleNode{Value: oldCur.Next.Value, Last: newCur}
+		newCur.Next = &ListDoubleNode{Value: oldCur.Next.Value, Last: newCur}
 		oldCur = oldCur.Next
 		newCur = newCur.Next
 	}
