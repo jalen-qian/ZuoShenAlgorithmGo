@@ -5,7 +5,7 @@ package main
 
 思路：使用二分的思想递归，假设我设计了一个process函数，给定数组和一个区间，process会返回这个区间内的最大值
 
-我们假设给定的array的区间分别是 L 和 R (假设数组长度是n，则L=0，R=n-1)，我找到L和R的中点 mid
+我们假设给定的array的区间分别是 L 和 R (假设数组长度是n，则L>=0，R<=n-1, L <= R)，我找到L和R的中点 mid
 则必然满足  maxValue = max(process(arr, L, mid), process(arr, mid+1, R))
 也就是将[L,mid]区间和[mid+1,R]区间分别用process求最大值，最终的最大值肯定是这两个值中较大的那个
 
