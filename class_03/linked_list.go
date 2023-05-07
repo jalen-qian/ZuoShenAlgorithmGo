@@ -36,6 +36,27 @@ func GenerateRandomLinkedList(maxLength int, minValue int, maxValue int) *ListNo
 	return head
 }
 
+// GenerateRandomSortedLinkedList 随机生成一个有序的链表
+// maxLength 最大链表长度
+// minValue 最小值
+// maxStep 递增的最大值，[0, maxStep]
+func GenerateRandomSortedLinkedList(maxLength int, minValue int, maxStep int) *ListNode {
+	rand.Seed(time.Now().UnixNano())
+	length := rand.Intn(maxLength + 1)
+	if length == 0 {
+		return nil
+	}
+	// 先构造一个头节点
+	head := &ListNode{Value: rand.Intn(1001) + minValue}
+	cur := head
+	for i := 1; i < length; i++ {
+		value := cur.Value + rand.Intn(maxStep+1)
+		cur.Next = &ListNode{Value: value}
+		cur = cur.Next
+	}
+	return head
+}
+
 // SPrintLinkedList 打印链表
 func SPrintLinkedList(head *ListNode) string {
 	if head == nil {
