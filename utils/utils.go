@@ -13,23 +13,24 @@ func Swap(arr []int, i, j int) {
 }
 
 // GenerateRandomSlice 初始化一个随机切片
-// 	@param maxLen 最大长度
-//  @param minNum 数组成员最小值
-//  @param maxNum 数组成员最大值
+//
+//		@param maxLen 最大长度
+//	 @param minNum 数组成员最小值
+//	 @param maxNum 数组成员最大值
 func GenerateRandomSlice(maxLen int, minNum int, maxNum int) []int {
 	if maxLen < 0 || minNum > maxNum {
 		panic("最大长度不可小于0，且最小值不可大于最大值！")
 	}
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	// [0,maxLen]
-	length := rand.Intn(maxLen + 1)
+	length := r.Intn(maxLen + 1)
 	result := make([]int, length)
 	// 填充数
 	for i := 0; i < length; i++ {
 		// 49 100
 		// [0, 51] + 49
 		// [49, 100]
-		num := rand.Intn(maxNum-minNum+1) + minNum
+		num := r.Intn(maxNum-minNum+1) + minNum
 		result[i] = num
 	}
 	return result
@@ -70,49 +71,51 @@ func IsEqual(arr1, arr2 []int) bool {
 }
 
 // GenerateRandomSortedSlice 初始化一个随机有序切片，从小到大排序
-// 	@param maxLen 最大长度
-//  @param minNum 数组成员最小值
-//  @param maxStep 数组成员递增幅度
+//
+//		@param maxLen 最大长度
+//	 @param minNum 数组成员最小值
+//	 @param maxStep 数组成员递增幅度
 func GenerateRandomSortedSlice(maxLen int, minNum int, maxStep int) []int {
 	if maxLen < 0 || maxStep < 0 {
 		panic("最大长度不可小于0，且最大递增幅度不可小于0！")
 	}
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	// [0, maxLen]
-	length := rand.Intn(maxLen + 1)
+	length := r.Intn(maxLen + 1)
 	result := make([]int, length)
 	if length == 0 {
 		return result
 	}
 	// 起始数，保证 >= minNum
-	result[0] = minNum + rand.Int()
+	result[0] = minNum + r.Int()
 	for i := 1; i < length; i++ {
-		step := rand.Intn(maxStep + 1)
+		step := r.Intn(maxStep + 1)
 		result[i] = result[i-1] + step
 	}
 	return result
 }
 
 // GenerateRandomSliceWithoutEqualNeighbor 初始化一个随机切片，并保证相邻的数不相等
-// 	@param maxLen 最大长度
-//  @param minNum 数组成员最小值
-//  @param maxNum 数组成员最大值
+//
+//		@param maxLen 最大长度
+//	 @param minNum 数组成员最小值
+//	 @param maxNum 数组成员最大值
 func GenerateRandomSliceWithoutEqualNeighbor(maxLen int, minNum int, maxNum int) []int {
 	if maxLen < 0 || minNum > maxNum {
 		panic("最大长度不可小于0，且最小值不可大于最大值！")
 	}
-	rand.Seed(time.Now().UnixNano())
-	length := rand.Intn(maxLen + 1)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	length := r.Intn(maxLen + 1)
 	result := make([]int, length)
 	// 填充数
 	for i := 0; i < length; i++ {
 		// 假如 minNum和maxNum分别是 -49 100
 		// [0, 149] - 49
 		// [-49, 100]
-		num := rand.Intn(maxNum-minNum+1) + minNum
+		num := r.Intn(maxNum-minNum+1) + minNum
 		if i > 0 && num == result[i-1] {
 			// 如何和前一个数相等，则随机增加1~100的任意一个值，保证不相等
-			tmp := rand.Intn(101) + 1
+			tmp := r.Intn(101) + 1
 			num += tmp
 		}
 		result[i] = num
@@ -123,4 +126,11 @@ func GenerateRandomSliceWithoutEqualNeighbor(maxLen int, minNum int, maxNum int)
 // GenerateRandInt32 生成随机的int32整数，取值范围 [-maxNum, maxNum]
 func GenerateRandInt32(maxNum int32) int32 {
 	return rand.Int31n(maxNum+1) - rand.Int31n(maxNum+1)
+}
+
+func Min(a, b int) int {
+	if a <= b {
+		return a
+	}
+	return b
 }

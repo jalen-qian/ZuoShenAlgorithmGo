@@ -15,7 +15,7 @@ func TestMergeSort(t *testing.T) {
 		arr := utils.GenerateRandomSlice(1000, -500, 500)
 		arr1 := utils.Copy(arr)
 		MergeSort(arr)
-		// 用系统的排序做对比
+		// 用系统的排序做对数器
 		sort.SliceStable(arr1, func(i, j int) bool {
 			return arr1[i] < arr1[j]
 		})

@@ -54,7 +54,6 @@ func merge(arr []int, L, M, R int) {
 		helpI++
 		index1++
 	}
-	// 至少有一个数组越界了，不管谁没越界，都将剩下的数拷贝
 	for index2 <= R {
 		help[helpI] = arr[index2]
 		helpI++
