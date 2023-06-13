@@ -78,4 +78,4 @@ d = logb a(b为底a的对数） log 2 2 为1，d也等于1
 
 另外，
 
-相关代码实现见`code02_merge_sort_iter.go`
+相关代码实现见[code02_merge_sort_iter.go](code02_merge_sort_iter.go)
