@@ -62,6 +62,12 @@ func mergeForReversePair(arr []int, L, M, R int) int {
 		indexR--
 		indexH--
 	}
+	// 最后将help数组拷贝回去
+	indexL = L
+	for _, num := range help {
+		arr[indexL] = num
+		indexL++
+	}
 	return count
 }
 

@@ -10,10 +10,10 @@ import (
 
 func TestReversePair(t *testing.T) {
 	// 测试10万次
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 100000; i++ {
 		// 随机生成一个数组
 		arr := utils.GenerateRandomSlice(1000, -500, 500)
-		arr = []int{0, 2, 7, 8, 3, 4, 6, 8, 7}
+		//arr = []int{0, 2, 7, 8, 3, 4, 6, 8, 7}
 		// 拷贝数组，用于对数器函数测试
 		arrCopy := utils.Copy(arr)
 		reversePairs := ReversePair(arr)
