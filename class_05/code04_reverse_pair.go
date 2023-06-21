@@ -4,8 +4,8 @@ package class_05
 逆序对问题：在一个数组中， 任何一个前面的数`a`，和任何一个后面的数`b`， 如果`(a,b)`是降序的，就称为逆序对。返回数组中所有的逆序对的个数。
 */
 
-// ReversePair 逆序对问题
-func ReversePair(arr []int) int {
+// ReversePairs 逆序对问题
+func ReversePairs(arr []int) int {
 	return processForReversePair(arr, 0, len(arr)-1)
 }
 
@@ -71,8 +71,8 @@ func mergeForReversePair(arr []int, L, M, R int) int {
 	return count
 }
 
-// ReversePairForTest 逆序对问题对数器，使用暴力方法 O(N^2)
-func ReversePairForTest(arr []int) int {
+// ReversePairsForTest 逆序对问题对数器，使用暴力方法 O(N^2)
+func ReversePairsForTest(arr []int) int {
 	count := 0
 	for i := 0; i < len(arr)-1; i++ {
 		// j 从 i的下一个开始找
