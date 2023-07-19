@@ -45,4 +45,4 @@
 > 10. 最终整体的逆序对个数是6。
  
 ## 4. 代码实现
-
+[code04_reverse_pair.go](code04_reverse_pair.go)
