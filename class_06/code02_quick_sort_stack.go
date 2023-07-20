@@ -13,16 +13,23 @@ func QuickSort4(nums []int) {
 	if len(nums) < 2 {
 		return
 	}
-
-}
-
-// process4 让nums在L到R上排好序，并且不使用递归
-func process4(nums []int, L, R int) {
-	// L>=R说明要处理的区域没有数或者只有一个数，直接返回
-	if L >= R {
-		return
-	}
 	// 初始化一个栈，用来存放子过程
 	stack := MyStackWithLinkedList[Op]{}
-
+	left, right := NetherlandsFlag5(nums, 0, len(nums)-1)
+	// 先创建两个子过程，并放到栈中
+	stack.Push(Op{L: 0, R: left - 1})
+	stack.Push(Op{L: right + 1, R: len(nums) - 1})
+	// 如果栈没有清空，则不断调用
+	for !stack.IsEmpty() {
+		// 取出一个子过程
+		sub := stack.Pop()
+		// 子过程没有>=两个数，则不用处理，直接跳下一个
+		if sub.L >= sub.R {
+			continue
+		}
+		// 子区间执行荷兰国旗问题，如果产生了更小的子区间，继续放到栈中
+		left, right = NetherlandsFlag5(nums, sub.L, sub.R)
+		stack.Push(Op{L: sub.L, R: left - 1})
+		stack.Push(Op{L: right + 1, R: sub.R})
+	}
 }
