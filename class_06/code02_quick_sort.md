@@ -74,4 +74,4 @@
 
 快排3.0：[code02_quick_sort.go](code02_quick_sort.go#L122)
 
-非递归方式实现快排
+非递归方式实现快排：[code02_quick_sort_stack.go](code02_quick_sort_stack.go)
