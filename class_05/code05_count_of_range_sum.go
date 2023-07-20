@@ -44,10 +44,19 @@ func count(sum []int, L int, R int, lower, upper int) int {
 	M := L + (R-L)>>1
 	// 2.1 先求左边部分的个数，同时将左边排好序
 	leftCount := count(sum, L, M, lower, upper)
+	//if L == 0 && M == 1 && R == 2 {
+	//	fmt.Println("leftCount:", leftCount)
+	//}
 	// 2.2 再求右边部分的个数，同时将右边排好序
 	rightCount := count(sum, M+1, R, lower, upper)
+	//if L == 0 && M == 1 && R == 2 {
+	//	fmt.Println("rightCount:", rightCount)
+	//}
 	// 2.3 再将左右两个数组merge，并求merge过程中的个数
 	mergeCount := mergeForCountOfRangeSum(sum, L, M, R, lower, upper)
+	//if L == 0 && M == 1 && R == 2 {
+	//	fmt.Println("mergeCount:", mergeCount)
+	//}
 	return leftCount + rightCount + mergeCount
 }
 
@@ -62,7 +71,7 @@ func mergeForCountOfRangeSum(sum []int, L int, M int, R int, lower int, upper in
 		min := sum[index] - upper
 		max := sum[index] - lower
 		// 将windowL移动到一个>= min的位置
-		for windowL < M && sum[windowL] < min {
+		for windowL <= M && sum[windowL] < min {
 			windowL++
 		}
 		// 将windowR移动到第一个 > max的位置
