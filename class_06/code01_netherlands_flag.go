@@ -8,8 +8,8 @@ import "ZuoShenAlgorithmGo/utils"
 要求：1.时间复杂度O(N) 2.除了少数几个变量，不分配额外空间
 */
 
-// FlagOfNetherlands 荷兰国旗问题，简易版
-func FlagOfNetherlands(nums []int, x int) {
+// NetherlandsFlag 荷兰国旗问题，简易版
+func NetherlandsFlag(nums []int, x int) {
 	if len(nums) <= 1 {
 		return
 	}
@@ -26,8 +26,8 @@ func FlagOfNetherlands(nums []int, x int) {
 	}
 }
 
-// FlagOfNetherlands1 荷兰国旗问题，复杂版
-func FlagOfNetherlands1(nums []int, x int) {
+// NetherlandsFlag1 荷兰国旗问题，复杂版
+func NetherlandsFlag1(nums []int, x int) {
 	if len(nums) <= 1 {
 		return
 	}
@@ -52,8 +52,8 @@ func FlagOfNetherlands1(nums []int, x int) {
 	}
 }
 
-// FlagOfNetherlands2 荷兰国旗问题，复杂版2
-func FlagOfNetherlands2(nums []int) {
+// NetherlandsFlag2 荷兰国旗问题，复杂版2
+func NetherlandsFlag2(nums []int) {
 	length := len(nums)
 	if length <= 1 {
 		return
