@@ -78,3 +78,45 @@ func TestMaxHeap(t *testing.T) {
 		}
 	}
 }
+
+// TestMyHeap 测试泛型的堆
+func TestMyHeap(t *testing.T) {
+	// 泛型的大根堆
+	myMaxHeap := NewMyHeap[int](func(a int, b int) bool {
+		return a > b
+	})
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	intHeap := make(IntHeap, 0)
+	for i := 0; i < 100000; i++ {
+		// 生成一个随机数 [-1000, 1000]
+		randomNum := r.Intn(1001) - r.Intn(1001)
+		randFloat := r.Float64()
+		if randFloat < 0.33 {
+			// 1/3 概率加入随机数
+			myMaxHeap.Push(randomNum)
+			heap.Push(&intHeap, randomNum)
+		} else if randFloat < 0.66 {
+			// 1/3 概率弹出一个数（如果堆不是空的）
+			var myHeapPop int
+			var intHeapPop int
+			if !myMaxHeap.IsEmpty() {
+				myHeapPop = myMaxHeap.Pop()
+			}
+			if intHeap.Len() != 0 {
+				intHeapPop = heap.Pop(&intHeap).(int)
+			}
+			if myHeapPop != intHeapPop {
+				t.Errorf("测试失败，myMaxHeap弹出的数是：%d, 系统堆弹出的数是：%d", myHeapPop, intHeapPop)
+				break
+			}
+		} else {
+			// 1/3 概率判断是否为空
+			myHeapIsEmpty := myMaxHeap.IsEmpty()
+			intHeapIsEmpty := intHeap.Len() == 0
+			if myHeapIsEmpty != intHeapIsEmpty {
+				t.Errorf("测试失败，myMaxHeap是空的：%v, 系统堆是空的：%v", myHeapIsEmpty, intHeapIsEmpty)
+				break
+			}
+		}
+	}
+}

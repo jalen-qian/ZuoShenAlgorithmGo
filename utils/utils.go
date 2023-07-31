@@ -87,7 +87,7 @@ func GenerateRandomSortedSlice(maxLen int, minNum int, maxStep int) []int {
 		return result
 	}
 	// 起始数，保证 >= minNum
-	result[0] = minNum + r.Int()
+	result[0] = minNum + r.Intn(10000)
 	for i := 1; i < length; i++ {
 		step := r.Intn(maxStep + 1)
 		result[i] = result[i-1] + step
