@@ -44,6 +44,15 @@ func (heap *MyHeap[T]) Pop() T {
 	return ans
 }
 
+// Peek 只返回堆顶的值，但是不弹出
+func (heap *MyHeap[T]) Peek() T {
+	return heap.arr[0]
+}
+
+func (heap *MyHeap[T]) Size() int {
+	return heap.heapSize
+}
+
 func (heap *MyHeap[T]) heapify(arr []T, index int, heapSize int) {
 	// 左孩子 index * 2 + 1 如果有右孩子，则右孩子是 left + 1
 	left := index*2 + 1
