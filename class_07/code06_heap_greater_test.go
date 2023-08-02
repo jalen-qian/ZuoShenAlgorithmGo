@@ -26,8 +26,7 @@ func TestMyHeapGreater(t *testing.T) {
 	u9 := &User{"刘备", 60}
 	u10 := &User{"卧龙", 23}
 	u11 := &User{"武松", 48}
-	// 初始化一个小根堆，堆中的用户排序按照年龄从小到大排序，如果年龄相等，则名字小的排前面
-	myHeap := NewMyHeapGreater[*User](func(a *User, b *User) bool {
+	myUserComparator := func(a *User, b *User) bool {
 		// 年龄小的排前面
 		if a.age < b.age {
 			return true
@@ -37,7 +36,9 @@ func TestMyHeapGreater(t *testing.T) {
 		} else {
 			return false
 		}
-	})
+	}
+	// 初始化一个小根堆，堆中的用户排序按照年龄从小到大排序，如果年龄相等，则名字小的排前面
+	myHeap := NewMyHeapGreater[*User](myUserComparator)
 	myHeap.Push(u1)
 	myHeap.Push(u2)
 	myHeap.Push(u3)
