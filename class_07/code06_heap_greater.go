@@ -12,6 +12,7 @@ type MyHeapGreater[T comparable] struct {
 func NewMyHeapGreater[T comparable](comparator MyComparator[T]) *MyHeapGreater[T] {
 	return &MyHeapGreater[T]{
 		comparator: comparator,
+		indexMap:   make(map[T]int),
 	}
 }
 
@@ -23,46 +24,72 @@ func (heap *MyHeapGreater[T]) Contains(obj T) bool {
 
 // Remove 额外功能2：从堆中移除某个对象
 func (heap *MyHeapGreater[T]) Remove(obj T) {
-	i, ok := heap.indexMap[obj]
-	// 如果堆中没有这个元素，则移除
+	// 获取obj对象在堆中的位置
+	index, ok := heap.indexMap[obj]
+	// 如果堆中没有这个元素，则什么都不用做，返回
 	if !ok {
 		return
 	}
-	// 将这个元素和最后位置交换
-	heap.swap(heap.arr, i, heap.heapSize-1)
-	// 删除最后一个元素
-	delete(heap.indexMap, obj)
+	// 要填补index空缺位置的元素，最后一个元素（实际上就是和最后一个元素交换的另一种写法）
+	replace := heap.arr[heap.heapSize-1]
+	// 将最后一个元素从堆中删掉
 	heap.heapSize--
-	// 从i位置开始调整
-	//if heap.arr[i] >=
+	// 将obj的索引删掉
+	delete(heap.indexMap, obj)
+
+	// 如果要删的obj，正好就是最后一个元素 replace ，则什么都不用干
+	if replace != obj {
+		// 要删的obj，不是最后一个元素
+		// 将replace塞到index的位置
+		heap.arr[index] = replace
+		heap.indexMap[replace] = index
+		// 给replace元素重新Resign调整
+		heap.Resign(replace)
+	}
 }
 
-// Push 向大根堆中加入一个数
-func (heap *MyHeapGreater[T]) Push(num T) {
+// Resign 额外功能3，改变了某个对象的值，并且这个值是影响比较大小的，改完就不符合堆结构了，让堆重新调整成堆结构
+// 这个功能是系统堆肯定不会提供的
+func (heap *MyHeapGreater[T]) Resign(obj T) {
+	index, ok := heap.indexMap[obj]
+	if ok {
+		// 这两个只会发生一个
+		heap.heapInsert(index)
+		heap.heapify(index)
+	}
+}
+
+// Push 向堆中加入一个对象
+func (heap *MyHeapGreater[T]) Push(obj T) {
 	// heapSize初始等于0，添加一个数后heapSize等于1，也就是说，heapSize就是下次要加入的数字的位置
-	heap.add(num, heap.heapSize)
-	// 执行heapInsert
-	heap.heapInsert(heap.arr, heap.heapSize)
+	heap.add(obj, heap.heapSize)
+	heap.indexMap[obj] = heap.heapSize
+	// 执行heapInsert，从最后一个位置往上调整
+	heap.heapInsert(heap.heapSize)
 	// 加入之后，heapSize++
 	heap.heapSize++
 }
 
 // heapInsert
-func (heap *MyHeapGreater[T]) heapInsert(arr []T, index int) {
+func (heap *MyHeapGreater[T]) heapInsert(index int) {
 	// 如果index位置比 (index - 1) /2 排前面，则交换
 	// 如果index已经是0，(0 - 1) /2 也是0，不会被交换
-	for heap.comparator(arr[index], arr[(index-1)/2]) {
-		heap.swap(arr, index, (index-1)/2)
+	for heap.comparator(heap.arr[index], heap.arr[(index-1)/2]) {
+		heap.swap(index, (index-1)/2)
 		index = (index - 1) / 2
 	}
 }
 
 // Pop 从大根堆中弹出0位置的数（最大的数），剩下的数仍然维持大根堆
 func (heap *MyHeapGreater[T]) Pop() T {
+	// 弹出堆顶的元素
 	ans := heap.arr[0]
-	heap.swap(heap.arr, 0, heap.heapSize-1)
+	heap.swap(0, heap.heapSize-1)
 	heap.heapSize--
-	heap.heapify(heap.arr, 0, heap.heapSize)
+	// 堆最后位置的元素换到了0位置，从0位置开始heapify，重新调整成堆
+	heap.heapify(0)
+	// 删除ans在map中的位置索引
+	delete(heap.indexMap, ans)
 	return ans
 }
 
@@ -75,26 +102,26 @@ func (heap *MyHeapGreater[T]) Size() int {
 	return heap.heapSize
 }
 
-func (heap *MyHeapGreater[T]) heapify(arr []T, index int, heapSize int) {
+func (heap *MyHeapGreater[T]) heapify(index int) {
 	// 左孩子 index * 2 + 1 如果有右孩子，则右孩子是 left + 1
 	left := index*2 + 1
 	// 当前堆最后一个数的位置是 heapSize - 1
-	for left < heapSize {
+	for left < heap.heapSize {
 		// 比较左右孩子，找到较大的，将位置给largest
 		largest := left
 		// 如果有又孩子，且右孩子比左孩子大，则右孩子给largest
-		if left+1 < heapSize && heap.comparator(arr[left+1], arr[left]) {
+		if left+1 < heap.heapSize && heap.comparator(heap.arr[left+1], heap.arr[left]) {
 			largest = left + 1
 		}
 		// 找到index和largest中谁最大，给largest
-		if heap.comparator(arr[index], arr[largest]) {
+		if heap.comparator(heap.arr[index], heap.arr[largest]) {
 			largest = index
 		}
 		// 如果largest==index，说明左右孩子都不比当前位置的数大，则停止
 		if largest == index {
 			break
 		}
-		heap.swap(arr, largest, index)
+		heap.swap(largest, index)
 		index = largest
 		// 找到下一个左孩子
 		left = index*2 + 1
@@ -114,8 +141,11 @@ func (heap *MyHeapGreater[T]) IsEmpty() bool {
 }
 
 // 交换
-func (heap *MyHeapGreater[T]) swap(arr []T, a, b int) {
-	tmp := arr[a]
-	arr[a] = arr[b]
-	arr[b] = tmp
+func (heap *MyHeapGreater[T]) swap(a, b int) {
+	// 交换过程中，两个对象的位置索引也交换
+	heap.indexMap[heap.arr[a]] = b
+	heap.indexMap[heap.arr[b]] = a
+	tmp := heap.arr[a]
+	heap.arr[a] = heap.arr[b]
+	heap.arr[b] = tmp
 }
