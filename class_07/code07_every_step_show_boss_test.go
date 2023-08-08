@@ -111,3 +111,50 @@ func generateEvents(maxLen int, minId, maxId int) ([]int, []bool, int) {
 	}
 	return arr, op, k
 }
+
+// 顺便解了个leetcode的简单题：821题：https://leetcode.cn/problems/shortest-distance-to-a-character/
+func TestShortestToChar(t *testing.T) {
+	fmt.Println(shortestToChar("loveleetcode", 'e'))
+}
+
+func shortestToChar(s string, c byte) []int {
+	L := -1
+	R := 0
+	var ans []int
+	// 先找到第一个c的位置
+	for i, _ := range s {
+		if s[i] == c {
+			R = i
+			break
+		}
+	}
+	// 不断遍历求绝对值
+	for i, _ := range s {
+		ans = append(ans, getDistance(L, R, i))
+		if R == i {
+			L = R
+			// 重新找到下个R
+			for j := i + 1; j < len(s); j++ {
+				if s[j] == c {
+					R = j
+					break
+				}
+			}
+		}
+	}
+	return ans
+}
+
+func getDistance(L, R int, index int) int {
+	if L == -1 {
+		return R - index
+	}
+	if R == L {
+		return index - L
+	}
+	if index-L < R-index {
+		return index - L
+	} else {
+		return R - index
+	}
+}
