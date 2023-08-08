@@ -73,8 +73,7 @@ func (heap *MyHeapGreater[T]) Push(obj T) {
 // heapInsert
 func (heap *MyHeapGreater[T]) heapInsert(index int) {
 	// 如果index位置比 (index - 1) /2 排前面，则交换
-	// 如果index已经是0，(0 - 1) /2 也是0，不会被交换
-	for heap.comparator(heap.arr[index], heap.arr[(index-1)/2]) {
+	for heap.comparator(heap.arr[index], heap.arr[(index-1)/2]) && index != 0 {
 		heap.swap(index, (index-1)/2)
 		index = (index - 1) / 2
 	}
@@ -148,4 +147,13 @@ func (heap *MyHeapGreater[T]) swap(a, b int) {
 	tmp := heap.arr[a]
 	heap.arr[a] = heap.arr[b]
 	heap.arr[b] = tmp
+}
+
+// GetAllElements 返回所有的元素
+func (heap *MyHeapGreater[T]) GetAllElements() []T {
+	var ans []T
+	for i := 0; i < heap.heapSize; i++ {
+		ans = append(ans, heap.arr[i])
+	}
+	return ans
 }
