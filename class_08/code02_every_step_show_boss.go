@@ -1,4 +1,4 @@
-package class_07
+package class_08
 
 import (
 	"sort"
@@ -20,7 +20,7 @@ func candsComparator(c1 *customer, c2 *customer) bool {
 		return true
 	} else if c1.buy == c2.buy {
 		// 排序规则2，如果c1和c2的购买数相等，则最先进入候选区的用户排前面（机会优先给最早进入候选区的用户）
-		if c1.enterTime <= c2.enterTime {
+		if c1.enterTime < c2.enterTime {
 			return true
 		} else {
 			return false
@@ -142,7 +142,7 @@ func (d *WhoIsYourDaddy) move(currentTime int) {
 	if d.candsHeap.IsEmpty() {
 		return
 	}
-	// 看爹区是否是满的，如果不是满的，则直接将候选区的堆顶给爹区
+	// 看爹区是否是满的，如果不是满的，则直接将候选区的堆顶给爹区（候选区不为空，爹区还不满，只可能是当前顾客退货从爹区删除了）
 	if d.daddyHeap.Size() < d.limit {
 		d.candsHeap.Peek().enterTime = currentTime
 		d.daddyHeap.Push(d.candsHeap.Pop())
@@ -212,8 +212,8 @@ func TopKCompare(arr []int, op []bool, k int) [][]int {
 			}
 		}
 		// 走到这里，则当前顾客必在一个区，要么两个区都没有，刚刚放到了爹区和候选区中的一个，要么之前就在某个区
-		// 不管哪种情况，c顾客的购买数变了，可能需要调整候选区的顾客到爹区，或者淘汰爹区中的顾客到候选区
-		// 先删除所有为0的
+		// 不管哪种情况，c顾客的购买数变了，可能需要调整候选区的顾客到爹区，并淘汰爹区中的顾客到候选区
+		// 先删除所有购买数为0的顾客
 		deleteZeroBuy(&daddy)
 		deleteZeroBuy(&cands)
 		// 重新按照题目要求排序

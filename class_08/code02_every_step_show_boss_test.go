@@ -1,4 +1,4 @@
-package class_07
+package class_08
 
 import (
 	"fmt"
