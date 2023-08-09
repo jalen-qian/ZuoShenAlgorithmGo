@@ -31,22 +31,23 @@ func (t *Trie1) Insert(word string) {
 		return
 	}
 	node := t.root // node先来到头节点的位置
-	// 所有单词必然经过头节点，所有头节点的pass++
+	// 所有单词必然经过头节点，头节点的pass++
 	node.pass++
 	// 遍历这个单词的每个字符
 	var path int32
 	for _, c := range word {
-		path = c - 'a' // 前缀树的nexts[i]表示ascii码中的第i个字符，'a'是第0个字符
-		// 判断通向c的路存不存在，如果不存在，就创建这条路
+		// 前缀树的nexts[i]表示ascii码中的第i个字符，'a'是第0个字符，这里 c-'a' 就找到了c字符的通路
+		path = c - 'a'
+		// 判断通向c的路存不存在，如果不存在，就创建这条路径
 		if node.nexts[path] == nil {
 			node.nexts[path] = newNode1()
 		}
 		// 通向c的这条路的节点的pass++，表示多了一个字符串经过这条路
 		node.nexts[path].pass++
-		// node跳到这个节点
+		// node跳到c字符所在的节点，继续遍历
 		node = node.nexts[path]
 	}
-	// 遍历完后，node肯定在word字符串的最后字符的节点，则end++
+	// 遍历完后，node肯定在word字符串的最后字符通向的节点，则end++
 	node.end++
 }
 
