@@ -17,7 +17,15 @@ func Swap(arr []int, i, j int) {
 //		@param maxLen 最大长度
 //	 @param minNum 数组成员最小值
 //	 @param maxNum 数组成员最大值
-func GenerateRandomSlice(maxLen int, minNum int, maxNum int) []int {
+func GenerateRandomSlice(maxLen int, minNum int, maxNum int, customizedValues ...int) []int {
+	// 如果传入了自定义的值，则使用自定义的值生成数组直接返回
+	if len(customizedValues) > 0 {
+		customizedAns := make([]int, 0)
+		for _, value := range customizedValues {
+			customizedAns = append(customizedAns, value)
+		}
+		return customizedAns
+	}
 	if maxLen < 0 || minNum > maxNum {
 		panic("最大长度不可小于0，且最小值不可大于最大值！")
 	}

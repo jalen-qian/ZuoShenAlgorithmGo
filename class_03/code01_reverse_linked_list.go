@@ -1,4 +1,4 @@
-package main
+package class_03
 
 // reverseLinkedList 反转单向链表
 func reverseLinkedList(head *ListNode) *ListNode {

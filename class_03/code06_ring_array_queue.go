@@ -1,4 +1,4 @@
-package main
+package class_03
 
 import "errors"
 

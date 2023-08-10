@@ -1,4 +1,4 @@
-package main
+package class_03
 
 /*
 实现一个双向队列，并通过双向队列实现栈和队列
@@ -16,7 +16,7 @@ type IDoubleEndsQueue[T any] interface {
 	PeekFromBottom() T     // 返回尾部的值，但是不弹出
 }
 
-// ListDoubleNode 双链表
+// DoubleNode 双链表
 type DoubleNode[T any] struct {
 	value T
 	next  *DoubleNode[T]

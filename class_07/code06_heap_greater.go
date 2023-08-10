@@ -1,17 +1,15 @@
-package class_08
-
-import "ZuoShenAlgorithmGo/class_07"
+package class_07
 
 // MyHeapGreater 手写堆，提供比系统堆更多的功能
 // 注意：因为泛型T要放到哈希表维护索引位置，所以T要是能比较的，所以泛型类型是 comparable
 type MyHeapGreater[T comparable] struct {
-	arr        []T                      // 存放堆的数组
-	heapSize   int                      // 当前堆中数字的多少（堆的大小）
-	comparator class_07.MyComparator[T] // 提供一个比较器，用于确定类型如何比较大小
-	indexMap   map[T]int                // T的哈希表，用于维护T在arr中的位置
+	arr        []T             // 存放堆的数组
+	heapSize   int             // 当前堆中数字的多少（堆的大小）
+	comparator MyComparator[T] // 提供一个比较器，用于确定类型如何比较大小
+	indexMap   map[T]int       // T的哈希表，用于维护T在arr中的位置
 }
 
-func NewMyHeapGreater[T comparable](comparator class_07.MyComparator[T]) *MyHeapGreater[T] {
+func NewMyHeapGreater[T comparable](comparator MyComparator[T]) *MyHeapGreater[T] {
 	return &MyHeapGreater[T]{
 		comparator: comparator,
 		indexMap:   make(map[T]int),

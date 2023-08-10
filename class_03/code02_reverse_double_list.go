@@ -1,4 +1,4 @@
-package main
+package class_03
 
 func reverseDoubleList(head *ListDoubleNode) *ListDoubleNode {
 	if head == nil {

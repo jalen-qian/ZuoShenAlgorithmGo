@@ -1,4 +1,4 @@
-package main
+package class_03
 
 /*
 给定一个无序的数组，使用递归返回数组中的最大值，要求时间复杂度O(logN)

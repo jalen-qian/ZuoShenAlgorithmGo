@@ -1,4 +1,4 @@
-package main
+package class_03
 
 // 题目2：删除链表中给定的数
 func deleteNumberInLinkedList(head *ListNode, value int) *ListNode {
