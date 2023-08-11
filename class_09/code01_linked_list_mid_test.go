@@ -113,6 +113,26 @@ func generateRandomLinkListAndArr(maxLen, minNum, maxNum int, customizedValues .
 	return head, arr
 }
 
+func generateCustomLinkedListByArr(customArr []int) (*Node, []int) {
+	if len(customArr) == 0 {
+		return nil, nil
+	}
+	arr := utils.GenerateRandomSlice(0, 0, 0, customArr...)
+	// 基于这个数组生成链表
+	var head *Node
+	var cur *Node
+	if len(arr) > 0 {
+		head = &Node{Value: arr[0]}
+		cur = head
+	}
+	// 从1开始往后串
+	for i := 1; i < len(arr); i++ {
+		cur.Next = &Node{Value: arr[i]}
+		cur = cur.Next
+	}
+	return head, arr
+}
+
 // 如果是奇数个，返回中点，偶数个，返回上中点，如果数组为空，返回-1
 func MidOrUpMidNodeArr(arr []int) int {
 	if len(arr) == 0 {
