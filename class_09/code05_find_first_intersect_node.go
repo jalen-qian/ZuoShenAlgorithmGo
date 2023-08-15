@@ -25,16 +25,16 @@ func getLoopNode(head *Node) *Node {
 	}
 	fast, slow := head, head // 快慢指针都指向头
 	for slow.Next != nil {
-		if fast == nil {
+		if fast.Next == nil || fast.Next.Next == nil {
 			return nil
 		}
+		fast = fast.Next.Next
+		slow = slow.Next
 		// 如果追上了slow，则fast回到开头，并停止
 		if fast == slow {
 			fast = head
 			break
 		}
-		fast = fast.Next.Next
-		slow = slow.Next
 	}
 	for fast != slow {
 		fast = fast.Next
