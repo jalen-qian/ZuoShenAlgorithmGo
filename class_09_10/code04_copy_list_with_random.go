@@ -1,4 +1,4 @@
-package class_09
+package class_09_10
 
 // NodeWithRandom 带有一个随机指针的单链表
 type NodeWithRandom struct {

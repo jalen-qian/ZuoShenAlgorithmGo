@@ -1,4 +1,4 @@
-package class_09
+package class_09_10
 
 import "testing"
 
