@@ -38,26 +38,44 @@ func (r *UnRecursiveTraversalBT) In(root *Node) {
 	if root == nil {
 		return
 	}
-	// 创建一个栈，如果当前节点有左右孩子，就压入，没有就弹出
+	// 创建一个栈，如果当前节点有左孩子，就压入，并不断往左边界靠
 	stack := class_03.NewMyStack[*Node]()
-	// 3 2 1
 	cur := root
 	for !stack.IsEmpty() || cur != nil {
-		if cur.Left != nil || cur.Right != nil {
-			if cur.Right != nil {
-				stack.Push(cur.Right)
-			}
-			if cur.Left != nil {
-				stack.Push(cur.Left)
-			}
+		if cur != nil {
+			stack.Push(cur)
+			cur = cur.Left
 		} else {
-
+			cur = stack.Pop()
+			fmt.Printf("%d ", cur.Value)
+			cur = cur.Right
 		}
 	}
 	fmt.Println()
 }
 
-// Pos 后序遍历
-func (r *UnRecursiveTraversalBT) Pos(root *Node) {
-
+// Pos1 后序遍历
+func (r *UnRecursiveTraversalBT) Pos1(root *Node) {
+	if root == nil {
+		return
+	}
+	s1 := class_03.NewMyStack[*Node]()
+	s2 := class_03.NewMyStack[*Node]()
+	s1.Push(root)
+	for !s1.IsEmpty() {
+		head := s1.Pop()
+		// 只要出栈，不打印，而是压入另一个栈
+		s2.Push(head)
+		// 弹出后依次压入左和右，实现整体 头 右 左 的顺序弹出
+		if head.Left != nil {
+			s1.Push(head.Left)
+		}
+		if head.Right != nil {
+			s1.Push(head.Right)
+		}
+	}
+	// 所有事情做完，依次将s2弹出
+	for !s2.IsEmpty() {
+		fmt.Printf("%d ", s2.Pop().Value)
+	}
 }

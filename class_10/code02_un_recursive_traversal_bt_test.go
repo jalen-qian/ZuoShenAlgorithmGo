@@ -31,6 +31,9 @@ func TestUnRecursiveTraversalBT(t *testing.T) {
 		Left:  &Node{Value: 2, Left: &Node{Value: 4}, Right: &Node{Value: 5}},
 		Right: &Node{Value: 3, Left: &Node{Value: 6}, Right: &Node{Value: 7}},
 	}
+	PrintBT(root)
+	fmt.Println()
+
 	r := &UnRecursiveTraversalBT{}
 	fmt.Print("先序遍历：")
 	r.Pre(root)
@@ -41,6 +44,6 @@ func TestUnRecursiveTraversalBT(t *testing.T) {
 	fmt.Println()
 
 	fmt.Print("后序遍历：")
-	r.Pos(root)
+	r.Pos1(root)
 	fmt.Println()
 }
