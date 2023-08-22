@@ -1,9 +1,12 @@
 package class_11_12
 
 import (
+	"ZuoShenAlgorithmGo/class_03"
 	"ZuoShenAlgorithmGo/utils"
 	"fmt"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 func getTreeHeight(root *Node) int {
@@ -38,6 +41,10 @@ func writeArray(root *Node, row, column, treeHeight int, resArray [][]string) {
 }
 
 func PrintBT(root *Node) {
+	if root == nil {
+		fmt.Println("空树！")
+		return
+	}
 	height := getTreeHeight(root)
 	fmt.Printf("height: %v\n", height)
 	// 总宽度为节点高度 * 2 - 1, 因为还要画树枝符号
@@ -78,4 +85,49 @@ func PrintBT(root *Node) {
 		}
 		fmt.Println(res)
 	}
+}
+
+var NewNodeQueue = class_03.NewMyQueue[*Node]
+
+// 生成一个随机的二叉树
+// minValue 最小值 maxValue 最大值 maxLevel 最大的层
+func generateRandomBT(minValue int, maxValue int, maxLevel int) *Node {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	// 从第1层开始递归创建，直到层数 >= maxLevel
+	return generateBT(r, 1, minValue, maxValue, maxLevel)
+}
+
+func generateBT(r *rand.Rand, curLevel int, minValue int, maxValue int, maxLevel int) *Node {
+	// 40%概率会生成空节点
+	percent := r.Float64()
+	if curLevel > maxLevel || percent < 0.4 {
+		return nil
+	}
+	// 否则，生成一个随机的节点
+	node := &Node{
+		Value: r.Intn(maxValue-minValue+1) + minValue, // 5,10  [0,6)即[0,5]+5 => [5,10]
+	}
+	// 下一层随机生成
+	node.Left = generateBT(r, curLevel+1, minValue, maxValue, maxLevel)
+	node.Right = generateBT(r, curLevel+1, minValue, maxValue, maxLevel)
+	return node
+}
+
+// isBTEqual 判断两颗二叉树是否完全相等
+func isBTEqual(root1 *Node, root2 *Node) bool {
+	if root1 == nil && root2 != nil {
+		return false
+	}
+	if root2 == nil && root1 != nil {
+		return false
+	}
+	if root1 == nil && root2 == nil {
+		return true
+	}
+	// 走到这里，说明都不为空
+	if root1.Value != root2.Value {
+		return false
+	}
+	// 左右子树也要完全相等
+	return isBTEqual(root1.Left, root2.Left) && isBTEqual(root1.Right, root2.Right)
 }
