@@ -6,4 +6,5 @@ import "testing"
 
 func TestPrintAllFolds(t *testing.T) {
 	PrintAllFolds(3)
+	PrintAllFolds(4)
 }
