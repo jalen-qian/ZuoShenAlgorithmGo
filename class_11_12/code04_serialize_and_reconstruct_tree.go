@@ -15,7 +15,7 @@ import (
 type SerializeAndReconstructBT struct{}
 
 // PreSerialize 先序方式序列化成字符串
-func (s *SerializeAndReconstructBT) PreSerialize(head *Node) string {
+func (s *SerializeAndReconstructBT) PreSerialize(head *TreeNode) string {
 	queue := class_03.NewMyQueue[string]()
 	// 序列化
 	s.preSerialize(head, queue)
@@ -24,12 +24,12 @@ func (s *SerializeAndReconstructBT) PreSerialize(head *Node) string {
 }
 
 // 递归方式实现先序序列化
-func (s *SerializeAndReconstructBT) preSerialize(head *Node, queue *class_03.MyQueue[string]) {
+func (s *SerializeAndReconstructBT) preSerialize(head *TreeNode, queue *class_03.MyQueue[string]) {
 	if head == nil {
 		queue.Push("#")
 	} else {
 		// 先入队
-		queue.Push(strconv.Itoa(head.Value))
+		queue.Push(strconv.Itoa(head.Val))
 		// 再递归左子树和右子树
 		s.preSerialize(head.Left, queue)
 		s.preSerialize(head.Right, queue)
@@ -37,7 +37,7 @@ func (s *SerializeAndReconstructBT) preSerialize(head *Node, queue *class_03.MyQ
 }
 
 // InSerialize 中序方式序列化成字符串
-func (s *SerializeAndReconstructBT) InSerialize(head *Node) string {
+func (s *SerializeAndReconstructBT) InSerialize(head *TreeNode) string {
 	queue := class_03.NewMyQueue[string]()
 	// 序列化
 	s.inSerialize(head, queue)
@@ -46,21 +46,21 @@ func (s *SerializeAndReconstructBT) InSerialize(head *Node) string {
 }
 
 // 递归方式实现中序序列化
-func (s *SerializeAndReconstructBT) inSerialize(head *Node, queue *class_03.MyQueue[string]) {
+func (s *SerializeAndReconstructBT) inSerialize(head *TreeNode, queue *class_03.MyQueue[string]) {
 	if head == nil {
 		queue.Push("#")
 	} else {
 		// 先执行左子树
 		s.inSerialize(head.Left, queue)
 		// 再入队
-		queue.Push(strconv.Itoa(head.Value))
+		queue.Push(strconv.Itoa(head.Val))
 		// 再执行右子树
 		s.inSerialize(head.Right, queue)
 	}
 }
 
 // PosSerialize 后序方式序列化成字符串
-func (s *SerializeAndReconstructBT) PosSerialize(head *Node) string {
+func (s *SerializeAndReconstructBT) PosSerialize(head *TreeNode) string {
 	queue := class_03.NewMyQueue[string]()
 	// 序列化
 	s.posSerialize(head, queue)
@@ -69,7 +69,7 @@ func (s *SerializeAndReconstructBT) PosSerialize(head *Node) string {
 }
 
 // 递归方式实现后序序列化
-func (s *SerializeAndReconstructBT) posSerialize(head *Node, queue *class_03.MyQueue[string]) {
+func (s *SerializeAndReconstructBT) posSerialize(head *TreeNode, queue *class_03.MyQueue[string]) {
 	if head == nil {
 		queue.Push("#")
 	} else {
@@ -78,7 +78,7 @@ func (s *SerializeAndReconstructBT) posSerialize(head *Node, queue *class_03.MyQ
 		// 再执行右子树
 		s.posSerialize(head.Right, queue)
 		// 再入队
-		queue.Push(strconv.Itoa(head.Value))
+		queue.Push(strconv.Itoa(head.Val))
 	}
 }
 
@@ -100,11 +100,11 @@ func (s *SerializeAndReconstructBT) queueToStr(queue *class_03.MyQueue[string]) 
 }
 
 // LevelSerialize 按层遍历序列化
-func (s *SerializeAndReconstructBT) LevelSerialize(head *Node) string {
+func (s *SerializeAndReconstructBT) LevelSerialize(head *TreeNode) string {
 	queue := class_03.NewMyQueue[string]()
 	// 序列化
 	// 准备一个Node队列，用来实现按层遍历的
-	nodeQueue := NewNodeQueue()
+	nodeQueue := NewTreeNodeQueue()
 	// 头节点先入队列
 	nodeQueue.Push(head)
 	for !nodeQueue.IsEmpty() {
@@ -114,7 +114,7 @@ func (s *SerializeAndReconstructBT) LevelSerialize(head *Node) string {
 		if head == nil {
 			queue.Push("#")
 		} else {
-			queue.Push(strconv.Itoa(head.Value))
+			queue.Push(strconv.Itoa(head.Val))
 			// 左右子树入队列，不判断空，因为空也要序列化
 			nodeQueue.Push(head.Left)
 			nodeQueue.Push(head.Right)
@@ -127,7 +127,7 @@ func (s *SerializeAndReconstructBT) LevelSerialize(head *Node) string {
 // 反序列化
 
 // BuildByPreSerialize 通过先序遍历序列化后的字符串反序列化成树
-func (s *SerializeAndReconstructBT) BuildByPreSerialize(preSer string) *Node {
+func (s *SerializeAndReconstructBT) BuildByPreSerialize(preSer string) *TreeNode {
 	// 空树
 	if preSer == "" || preSer == "#" {
 		return nil
@@ -139,7 +139,7 @@ func (s *SerializeAndReconstructBT) BuildByPreSerialize(preSer string) *Node {
 	return ans
 }
 
-func (s *SerializeAndReconstructBT) buildByPreQueue(queue *class_03.MyQueue[string]) *Node {
+func (s *SerializeAndReconstructBT) buildByPreQueue(queue *class_03.MyQueue[string]) *TreeNode {
 	// 从队列中取出一个，作为头节点
 	head := s.buildNodeByQueue(queue)
 	// 递归
@@ -157,7 +157,7 @@ func (s *SerializeAndReconstructBT) buildByPreQueue(queue *class_03.MyQueue[stri
 //         /
 //        4
 // #,#,2,#,#,4,#,3,1
-func (s *SerializeAndReconstructBT) BuildByPosSerialize(posSer string) *Node {
+func (s *SerializeAndReconstructBT) BuildByPosSerialize(posSer string) *TreeNode {
 	// 空树
 	if posSer == "" || posSer == "#" {
 		return nil
@@ -177,7 +177,7 @@ func (s *SerializeAndReconstructBT) BuildByPosSerialize(posSer string) *Node {
 	return ans
 }
 
-func (s *SerializeAndReconstructBT) buildByPosStack(posStack *class_03.MyStack[string]) *Node {
+func (s *SerializeAndReconstructBT) buildByPosStack(posStack *class_03.MyStack[string]) *TreeNode {
 	// 当前栈是 头 右 左的顺序，先弹出的是头，再弹出的是右子树，再弹出的是左子树
 	// 1. 弹出头的值
 	strValue := posStack.Pop()
@@ -186,7 +186,7 @@ func (s *SerializeAndReconstructBT) buildByPosStack(posStack *class_03.MyStack[s
 	}
 	// 先构建头节点
 	headValue, _ := strconv.Atoi(strValue)
-	head := &Node{Value: headValue}
+	head := &TreeNode{Val: headValue}
 	// 递归，构建左右子节点，注意栈中的顺序是 头 右 左，所以构建时，也要遵循先右后左的顺序
 	if head != nil {
 		head.Right = s.buildByPosStack(posStack)
@@ -202,7 +202,7 @@ func (s *SerializeAndReconstructBT) buildByPosStack(posStack *class_03.MyStack[s
 //         /
 //        4
 // 1,2,3,#,#,4,#,#,#
-func (s *SerializeAndReconstructBT) BuildByLevelSerialize(preSer string) *Node {
+func (s *SerializeAndReconstructBT) BuildByLevelSerialize(preSer string) *TreeNode {
 	// 空树
 	if preSer == "" || preSer == "#" {
 		return nil
@@ -214,10 +214,10 @@ func (s *SerializeAndReconstructBT) BuildByLevelSerialize(preSer string) *Node {
 	return ans
 }
 
-func (s *SerializeAndReconstructBT) buildByLevelQueue(queue *class_03.MyQueue[string]) *Node {
+func (s *SerializeAndReconstructBT) buildByLevelQueue(queue *class_03.MyQueue[string]) *TreeNode {
 	head := s.buildNodeByQueue(queue)
 	// 构建一个Node队列
-	nodeQueue := NewNodeQueue()
+	nodeQueue := NewTreeNodeQueue()
 	// 头节点入队列
 	nodeQueue.Push(head)
 	for !nodeQueue.IsEmpty() {
@@ -256,7 +256,7 @@ func (s *SerializeAndReconstructBT) getStack(serialized string) *class_03.MyStac
 	return stack
 }
 
-func (s *SerializeAndReconstructBT) buildNodeByQueue(queue *class_03.MyQueue[string]) *Node {
+func (s *SerializeAndReconstructBT) buildNodeByQueue(queue *class_03.MyQueue[string]) *TreeNode {
 	if queue.IsEmpty() {
 		return nil
 	}
@@ -265,6 +265,6 @@ func (s *SerializeAndReconstructBT) buildNodeByQueue(queue *class_03.MyQueue[str
 		return nil
 	} else {
 		nodeValue, _ := strconv.Atoi(v)
-		return &Node{Value: nodeValue}
+		return &TreeNode{Val: nodeValue}
 	}
 }

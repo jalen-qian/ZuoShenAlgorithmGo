@@ -1,0 +1,38 @@
+digraph bTree{
+    node[shape=circle]
+    a->b;
+    a->Na[style=invis];
+
+    b->e;
+    b->c;
+
+    e->Ne[style=invis];
+    e->Ne[style=invis];
+    e->Ne[style=invis];
+    e->f;
+
+    c->g;
+    c->Nc[style=invis];
+    c->d;
+
+    g->Ng[style=invis];
+    g->Ng[style=invis];
+    g->Ng[style=invis];
+    g->Ng[style=invis];
+    g->h;
+    h->Nh[style=invis];
+    h->Nh[style=invis];
+    h->i;
+    i->Ni[style=invis];
+    i->Ni[style=invis];
+    i->j;
+
+    Na[style=invis];
+    Nb[style=invis];
+    Nc[style=invis];
+    Nd[style=invis];
+    Ne[style=invis];
+    Ng[style=invis];
+    Nh[style=invis];
+    Ni[style=invis];
+}

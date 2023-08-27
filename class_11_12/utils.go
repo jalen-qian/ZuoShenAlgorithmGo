@@ -9,18 +9,18 @@ import (
 	"time"
 )
 
-func getTreeHeight(root *Node) int {
+func getTreeHeight(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
 	return 1 + utils.Max(getTreeHeight(root.Left), getTreeHeight(root.Left))
 }
 
-func writeArray(root *Node, row, column, treeHeight int, resArray [][]string) {
+func writeArray(root *TreeNode, row, column, treeHeight int, resArray [][]string) {
 	if root == nil {
 		return
 	}
-	resArray[row][column] = strconv.Itoa(root.Value)
+	resArray[row][column] = strconv.Itoa(root.Val)
 	currentHeight := (row + 1) / 2 // 当前高度
 	if currentHeight == treeHeight {
 		return // 下面没有子节点了
@@ -40,7 +40,7 @@ func writeArray(root *Node, row, column, treeHeight int, resArray [][]string) {
 	}
 }
 
-func PrintBT(root *Node) {
+func PrintBT(root *TreeNode) {
 	if root == nil {
 		fmt.Println("空树！")
 		return
@@ -87,25 +87,25 @@ func PrintBT(root *Node) {
 	}
 }
 
-var NewNodeQueue = class_03.NewMyQueue[*Node]
+var NewTreeNodeQueue = class_03.NewMyQueue[*TreeNode]
 
 // 生成一个随机的二叉树
 // minValue 最小值 maxValue 最大值 maxLevel 最大的层
-func generateRandomBT(minValue int, maxValue int, maxLevel int) *Node {
+func generateRandomBT(minValue int, maxValue int, maxLevel int) *TreeNode {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	// 从第1层开始递归创建，直到层数 >= maxLevel
 	return generateBT(r, 1, minValue, maxValue, maxLevel)
 }
 
-func generateBT(r *rand.Rand, curLevel int, minValue int, maxValue int, maxLevel int) *Node {
+func generateBT(r *rand.Rand, curLevel int, minValue int, maxValue int, maxLevel int) *TreeNode {
 	// 40%概率会生成空节点
 	percent := r.Float64()
 	if curLevel > maxLevel || percent < 0.4 {
 		return nil
 	}
 	// 否则，生成一个随机的节点
-	node := &Node{
-		Value: r.Intn(maxValue-minValue+1) + minValue, // 5,10  [0,6)即[0,5]+5 => [5,10]
+	node := &TreeNode{
+		Val: r.Intn(maxValue-minValue+1) + minValue, // 5,10  [0,6)即[0,5]+5 => [5,10]
 	}
 	// 下一层随机生成
 	node.Left = generateBT(r, curLevel+1, minValue, maxValue, maxLevel)
@@ -114,7 +114,7 @@ func generateBT(r *rand.Rand, curLevel int, minValue int, maxValue int, maxLevel
 }
 
 // isBTEqual 判断两颗二叉树是否完全相等
-func isBTEqual(root1 *Node, root2 *Node) bool {
+func isBTEqual(root1 *TreeNode, root2 *TreeNode) bool {
 	if root1 == nil && root2 != nil {
 		return false
 	}
@@ -125,7 +125,7 @@ func isBTEqual(root1 *Node, root2 *Node) bool {
 		return true
 	}
 	// 走到这里，说明都不为空
-	if root1.Value != root2.Value {
+	if root1.Val != root2.Val {
 		return false
 	}
 	// 左右子树也要完全相等

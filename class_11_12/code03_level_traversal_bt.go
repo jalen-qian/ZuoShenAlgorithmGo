@@ -10,16 +10,16 @@ import (
 type LevelTraversalBT struct{}
 
 // Level 实现二叉树按层遍历
-func (r *LevelTraversalBT) Level(root *Node) {
+func (r *LevelTraversalBT) Level(root *TreeNode) {
 	if root == nil {
 		return
 	}
-	queue := class_03.NewMyQueue[*Node]()
+	queue := class_03.NewMyQueue[*TreeNode]()
 	// 头先入队列
 	queue.Push(root)
 	for !queue.IsEmpty() {
 		cur := queue.Poll()
-		fmt.Printf("%d ", cur.Value)
+		fmt.Printf("%d ", cur.Val)
 		if cur.Left != nil {
 			queue.Push(cur.Left)
 		}
