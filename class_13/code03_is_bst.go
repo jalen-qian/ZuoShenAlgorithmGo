@@ -23,16 +23,67 @@ func processIsBST(x *TreeNode) *info {
 	}
 	leftInfo := processIsBST(x.Left)
 	rightInfo := processIsBST(x.Right)
-
-	// 最小值
-
-	return isBst, max, min
+	max := x.Val
+	if leftInfo != nil {
+		max = utils.Max(leftInfo.max, max)
+	}
+	if rightInfo != nil {
+		max = utils.Max(rightInfo.max, max)
+	}
+	min := x.Val
+	if leftInfo != nil {
+		min = utils.Min(leftInfo.min, min)
+	}
+	if rightInfo != nil {
+		min = utils.Min(rightInfo.min, min)
+	}
+	isBst := true // 先默认是搜索二叉树
+	// 左子树不为空且左子树不是搜索二叉树，则不是
+	if leftInfo != nil && !leftInfo.isBST {
+		isBst = false
+	}
+	// 右子树不为空且右子树不是搜索二叉树，则不是
+	if rightInfo != nil && !rightInfo.isBST {
+		isBst = false
+	}
+	// 左子树的最大值不比当前值小，则不是
+	if leftInfo != nil && leftInfo.max >= x.Val {
+		isBst = false
+	}
+	// 又子树的最小值不比当前值大，则不是
+	if rightInfo != nil && rightInfo.min <= x.Val {
+		isBst = false
+	}
+	return &info{isBST: isBst, max: max, min: min}
 }
 
-func getMin(a, b, c int) int {
-	return utils.Min(utils.Min(a, b), c)
+// 判断是否是搜索二叉树的方式2，中序遍历是否升序
+// 这是充分必要条件：中序遍历升序，则一定是搜索二叉树（这里指没有重复值的升序）
+// 如果是搜索二叉树，则中序遍历一定是升序
+
+// IsBST2 通过中序遍历是否升序的方式判断是否是搜索二叉树
+func IsBST2(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	inList := make([]int, 0)
+	// 中序遍历
+	in(root, &inList)
+	// 判断inList是否是升序，如果不是，则不是搜索二叉树
+	for i := 1; i < len(inList); i++ {
+		if inList[i] <= inList[i-1] {
+			return false
+		}
+	}
+	return true
 }
 
-func getMax(a, b, c int) int {
-	return utils.Max(utils.Max(a, b), c)
+// 递归实现中序遍历，并将顺序记录到list中
+func in(x *TreeNode, list *[]int) {
+	if x == nil {
+		return
+	}
+	in(x.Left, list)
+	*list = append(*list, x.Val)
+	in(x.Right, list)
 }
