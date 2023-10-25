@@ -3,6 +3,7 @@ package class_13
 import "ZuoShenAlgorithmGo/utils"
 
 // 判断一棵二叉树是否是平衡二叉树
+// 平衡二叉树的概念：一个二叉树的每个子树，左树高度和右树高度差的绝对值不大于1（<=1），则这颗树是平衡二叉树。
 
 func IsBalanced(root *TreeNode) bool {
 	if root == nil {
@@ -39,5 +40,3 @@ func getDelAbs(a, b int) int {
 	}
 	return del
 }
-
-//

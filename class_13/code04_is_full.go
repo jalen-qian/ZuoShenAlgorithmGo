@@ -2,8 +2,8 @@ package class_13
 
 import "ZuoShenAlgorithmGo/utils"
 
-// 判断一颗二叉树是否是满二叉树
-
+// IsFull 判断一颗二叉树是否是满二叉树
+// 满二叉树的节点个数与高度（或层数）的关系一定满足：n = 2 ^ height - 1
 func IsFull(root *TreeNode) bool {
 	if root == nil {
 		return true

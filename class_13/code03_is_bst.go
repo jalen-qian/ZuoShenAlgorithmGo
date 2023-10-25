@@ -3,6 +3,7 @@ package class_13
 import "ZuoShenAlgorithmGo/utils"
 
 // IsBST 判断是否是搜索二叉树
+// 搜索二叉树概念：一颗二叉树的任意子树，其左子树都比头节点小，右子树都比头结点大，则这颗树是搜索二叉树。
 func IsBST(root *TreeNode) bool {
 	if root == nil {
 		return true
