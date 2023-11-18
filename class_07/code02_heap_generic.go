@@ -1,17 +1,30 @@
 package class_07
 
-type MyComparator[T any] func(a T, b T) bool
+import (
+	"golang.org/x/exp/constraints"
+)
+
+type MyComparator[T comparable] func(a T, b T) bool
 
 // MyHeap 实现一个泛型的堆，能接收任意类型
-type MyHeap[T any] struct {
+type MyHeap[T comparable] struct {
 	arr        []T // 存放堆的数组
 	heapSize   int // 当前堆中数字的多少（堆的大小）
 	comparator MyComparator[T]
 }
 
-func NewMyHeap[T any](comparator MyComparator[T]) *MyHeap[T] {
+func NewMyHeap[T constraints.Ordered](comparator ...MyComparator[T]) *MyHeap[T] {
+	var com MyComparator[T]
+	// 不传默认小根堆
+	if len(comparator) == 0 {
+		com = func(a, b T) bool {
+			return a < b
+		}
+	} else {
+		com = comparator[0]
+	}
 	return &MyHeap[T]{
-		comparator: comparator,
+		comparator: com,
 	}
 }
 
