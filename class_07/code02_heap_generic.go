@@ -4,15 +4,16 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-type MyComparator[T comparable] func(a T, b T) bool
+type MyComparator[T any] func(a T, b T) bool
 
 // MyHeap 实现一个泛型的堆，能接收任意类型
-type MyHeap[T comparable] struct {
+type MyHeap[T any] struct {
 	arr        []T // 存放堆的数组
 	heapSize   int // 当前堆中数字的多少（堆的大小）
 	comparator MyComparator[T]
 }
 
+// NewMyHeap 初始化一个可比较大小类型的堆，可以不传比较器，如果不传，则默认小根堆
 func NewMyHeap[T constraints.Ordered](comparator ...MyComparator[T]) *MyHeap[T] {
 	var com MyComparator[T]
 	// 不传默认小根堆
@@ -25,6 +26,13 @@ func NewMyHeap[T constraints.Ordered](comparator ...MyComparator[T]) *MyHeap[T] 
 	}
 	return &MyHeap[T]{
 		comparator: com,
+	}
+}
+
+// NewMyHeapAny 初始化一个任意类型泛型的堆，但是必须自己传入比较器
+func NewMyHeapAny[T any](comparator MyComparator[T]) *MyHeap[T] {
+	return &MyHeap[T]{
+		comparator: comparator,
 	}
 }
 

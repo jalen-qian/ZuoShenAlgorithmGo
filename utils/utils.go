@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -148,4 +150,18 @@ func Max(a, b int) int {
 		return a
 	}
 	return b
+}
+
+func SprintList(arr []int) string {
+	builder := strings.Builder{}
+	builder.WriteString("[]int{")
+	for i, num := range arr {
+		if i != len(arr)-1 {
+			builder.WriteString(fmt.Sprintf("%d, ", num))
+		} else {
+			builder.WriteString(fmt.Sprintf("%d", num))
+		}
+	}
+	builder.WriteString("}")
+	return builder.String()
 }
