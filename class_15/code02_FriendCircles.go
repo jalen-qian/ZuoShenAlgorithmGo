@@ -91,16 +91,17 @@ func newUnionFind(n int) *unionFind {
 }
 
 // 往上到不能再往上找到代表节点返回，并在这个过程中压缩路径
-func (u *unionFind) findFather(num int) int {
+func (u *unionFind) findFather(i int) int {
 	hi := 0
-	for u.parents[num] != num {
-		u.help[hi] = num
-		num = u.parents[num]
+	for u.parents[i] != i {
+		u.help[hi] = i
+		i = u.parents[i]
+		hi++
 	}
 	for hi--; hi >= 0; hi-- {
-		u.parents[hi] = num
+		u.parents[u.help[hi]] = i
 	}
-	return num
+	return i
 }
 
 // 合并a b所在的集合
