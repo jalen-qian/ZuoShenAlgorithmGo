@@ -29,7 +29,7 @@ func TestNumberOfIsland(t *testing.T) {
 // 结论：1000 * 1000 的矩阵
 // 感染方法：8ms 并查集(数组) 15ms 并查集(map实现) 437ms
 // 10000 * 10000 的矩阵
-// 感染方法：801ms 并查集(数组) 1551ms
+// 感染方法：801ms 并查集(数组) 1551ms  并查集(map)方式 56366ms
 // 结论：时间复杂度都是O(N)，但是并查集map实现，map底层的常数时间大，所以时间远高于感染方式和并查集数组实现的方式
 // 感染方式最快，并查集数组实现的方式消耗的时间略小于感染方式时间的两倍，但是远低于map实现方式。
 func TestNumIslandTime(t *testing.T) {
@@ -67,7 +67,8 @@ func TestNumIslandTime(t *testing.T) {
 	col = 10000
 	grids1 = generateGrids(row, col)
 	grids2 = copyGrids(grids1)
-	fmt.Println("感染方法、并查集(数组实现)的运行结果和运行时间")
+	grids3 = copyGrids(grids1)
+	fmt.Println("感染方法、并查集(数组实现)和并查集(map方式)的运行结果和运行时间")
 	fmt.Printf("随机生成的二维矩阵规模：%d * %d \n", row, col)
 
 	startTime = time.Now()
@@ -80,6 +81,12 @@ func TestNumIslandTime(t *testing.T) {
 	fmt.Printf("并查集(数组实现)的运行结果：%d\n", numIslands1(grids2))
 	endTime = time.Now()
 	fmt.Printf("并查集(数组实现)的运行时间：%d ms\n", endTime.Sub(startTime).Milliseconds())
+	fmt.Println()
+
+	startTime = time.Now()
+	fmt.Printf("并查集(map实现)的运行结果：%d\n", numIslands2(grids3))
+	endTime = time.Now()
+	fmt.Printf("并查集(map实现)的运行时间：%d ms\n", endTime.Sub(startTime).Milliseconds())
 	fmt.Println()
 }
 
