@@ -14,11 +14,17 @@ func Swap(arr []int, i, j int) {
 	arr[j] = tmp
 }
 
+func SwapSlice[T comparable](arr []T, i, j int) {
+	tmp := arr[i]
+	arr[i] = arr[j]
+	arr[j] = tmp
+}
+
 // GenerateRandomSlice 初始化一个随机切片
 //
-//		@param maxLen 最大长度
-//	 @param minNum 数组成员最小值
-//	 @param maxNum 数组成员最大值
+//	@param maxLen 最大长度
+//	@param minNum 数组成员最小值
+//	@param maxNum 数组成员最大值
 func GenerateRandomSlice(maxLen int, minNum int, maxNum int, customizedValues ...int) []int {
 	// 如果传入了自定义的值，则使用自定义的值生成数组直接返回
 	if len(customizedValues) > 0 {
