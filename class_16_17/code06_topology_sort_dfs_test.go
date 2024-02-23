@@ -20,9 +20,9 @@ func TestTopSortDfs1(t *testing.T) {
 			t.Error(err.Error())
 			return
 		}
-		ans2 := TopSortDfs2(graph)
+		ans2 := TopSortDFS2(graph)
 		if err := checkTopologyOrder(ans2, graph); err != nil {
-			t.Log("TopSortDfs2()测试失败:")
+			t.Log("TopSortDFS2()测试失败:")
 			t.Error(err.Error())
 			return
 		}
@@ -34,7 +34,7 @@ func TestTopSortDfs1(t *testing.T) {
 // maxNodes 最大节点个数
 // maxEdge 最大的边个数
 // 思路：先随机生成拓扑序，根据拓扑序逆向生成有向无环图
-// 在生成好所有的节点后，随机的连接边，但是选择连接的边的两个顶点，一定是在拓扑序的前后任意两个位置，这样就能保证生成无环图
+// 在生成好所有的节点后，随机的连接边，但是选择连接的边的两个节点，一定是在拓扑序的前面的连接到后面的，这样就能保证生成无环图
 // 另外，还有一个问题，要保证所有的点都是联通的，为了解决这个问题，我们在前 n-1 条边必定选择一个连接过的点和没有连接过的孤点
 // 之所以是前 n-1 条边，是因为要将一个图联通，至少需要 n-1 条边
 func randomDAG(maxNodes int) []*DirectedGraphNode {
@@ -42,10 +42,10 @@ func randomDAG(maxNodes int) []*DirectedGraphNode {
 	if n == 0 {
 		return nil
 	}
-	// 边的个数，取值范围是 [n-1, n*(n-1)/2]
+	// 边的个数，取值范围是 [n-1, n*(n-1)/2] ps:一个n个顶点的有向无环图，边最少是 n-1(刚好联通），最多是 n*(n-1) / 2
 	minEdge := n - 1
 	maxEdge := (n * (n - 1)) / 2
-	edgeNum := minEdge + rand.Intn(maxEdge-minEdge+1)
+	edgeNum := minEdge + rand.Intn(maxEdge-minEdge+1) // 在这个范围内取一个随机数
 	// 节点个数和边的个数都确定了，生成随机的拓扑序
 	nodes := make([]*DirectedGraphNode, n)
 	for i := 0; i < n; i++ {
