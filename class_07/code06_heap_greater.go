@@ -108,7 +108,7 @@ func (heap *MyHeapGreater[T]) heapify(index int) {
 	for left < heap.heapSize {
 		// 比较左右孩子，找到较大的，将位置给largest
 		largest := left
-		// 如果有又孩子，且右孩子比左孩子大，则右孩子给largest
+		// 如果有右孩子，且右孩子比左孩子大，则右孩子给largest
 		if left+1 < heap.heapSize && heap.comparator(heap.arr[left+1], heap.arr[left]) {
 			largest = left + 1
 		}

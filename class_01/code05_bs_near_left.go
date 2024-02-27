@@ -4,7 +4,6 @@ import (
 	"ZuoShenAlgorithmGo/utils"
 	"fmt"
 	"math/rand"
-	"time"
 )
 
 // 给定一个有序数组和一个数num，求出>=num的最左侧的位置，没找到则返回-1
@@ -46,7 +45,6 @@ func main() {
 	testTimes := 500000
 	for i := 0; i < testTimes; i++ {
 		sortedArr := utils.GenerateRandomSortedSlice(1000, -1000, 20)
-		rand.Seed(time.Now().UnixNano())
 		// [-20000, 20000]
 		num := rand.Intn(40001) - 20000
 		if findNearLeft(sortedArr, num) != findNearLeftComparator(sortedArr, num) {
