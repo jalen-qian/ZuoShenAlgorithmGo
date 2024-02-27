@@ -2,7 +2,6 @@ package class_16_17
 
 import (
 	"container/heap"
-	"fmt"
 	"math"
 
 	"ZuoShenAlgorithmGo/utils"
@@ -12,7 +11,7 @@ import (
 // 给你一个有向有权重的图，且权重都不是负数，给定你一个初始节点a，请你返回一个哈希表，这个表中记录了a到所有其他节点的最短距离
 //      b ———5——→ e
 //    3↗︎       ↗︎1
-//   a ——6——→ c
+//   a ——6——→ c ←—2— f
 //    1↘︎   ↗︎2
 //        d
 // 那么需要返回这样一张表
@@ -20,8 +19,9 @@ import (
 // b:3
 // c:3  a->d->c的距离是3，比直接到c的距离6要短
 // d:1
-// e:4  a->d->c->e的距离是4
-// 如果某个点从a无法到达，那么认为a到这个点的距离无穷大，不记录到表中。
+// e:4  a->d->c->e的距离和是4，比a->c->e和a->b->e两条路线的距离和都短
+//
+// 如果某个点从a无法到达，那么认为a到这个点的距离无穷大，不记录到表中，比如f点是a无法到达的，则不记录到哈希表
 //
 // 注意：迪瑞克斯拉算法，不一定要求权重都不能为负数，比如上面那张图，将d->c的权重改成-1也可以，那么a到c的距离就变成了0
 // a到e的距离变成了1
@@ -91,9 +91,8 @@ func getMinDistanceAndUnselectedNode(distanceMap map[*Node]int, selectedNodes *u
 // Dijkstra1 的 getMinDistanceAndUnselectedNode() 函数每次调用都会将已经出现过的点全部遍历一遍，才能找到距离最小的点。
 // 如果将已经加入的点放入一个堆中，每次弹出距离最小的，就能将时间复杂度优化到O(logN)了，但是有个问题，每次执行，迪瑞克斯拉算法会
 // 更新minNode所有的直接边相关的点到给定点的最近距离，这样堆中的数据就不满足堆结构了，需要重新调整成堆。如果是Java等语言，系统提供
-// 的堆做不到，得使用加强堆。但是在Go中，堆是实现系统的接口实现的，比较灵活（或者说Go中的堆都是手写加强堆，没有系统直接提供直接用的堆），
-// 而且系统也提供了 heap.Fix() 函数来满足破坏堆结构后重新
-// 调整。可以通过实现系统的堆接口来实现。
+// 的堆做不到，需要自己实现加强堆。但是在Go中，堆是实现系统的接口实现的，比较灵活（或者说Go中的堆都是手写加强堆，没有系统直接提供直接用的堆），
+// 而且系统也提供了 heap.Fix() 函数来满足破坏堆结构后重新调整。可以通过实现系统的堆接口来实现。
 func Dijkstra2(from *Node) map[*Node]int {
 	if from == nil {
 		return nil
@@ -119,7 +118,7 @@ func Dijkstra2(from *Node) map[*Node]int {
 type nodeHeap struct {
 	nodes []*Node
 	// 记录每个节点当前的距离，注意：如果弹出，不要删除对应的记录，这个map中的记录要作为添加过的证据
-	//
+	// 如果节点被弹出了，则将distanceMap中的对应距离改成-1，-1作为特殊标识，表示这个节点加入过，但是已经被弹出了
 	distanceMap map[*Node]int
 	indexMap    map[*Node]int // 记录每个节点当前的位置
 }
@@ -148,6 +147,7 @@ func (n *nodeHeap) AddOrUpdateOrIgnore(node *Node, distance int) {
 			distance: distance,
 		})
 	}
+	// 添加过，且当前就在堆中，没有被弹出，且新加入的距离更短，则更新这个节点的距离，并且重新调整成堆结构
 	if n.isEntered(node) && n.distanceMap[node] > distance {
 		// 在堆中，但是现在要更新的距离更近，则重新调整堆
 		n.distanceMap[node] = distance
@@ -177,12 +177,6 @@ func (n *nodeHeap) isEntered(node *Node) bool {
 
 // Less 定义谁排前面，这里是与给定点实时最短距离小的排前面
 func (n *nodeHeap) Less(i, j int) bool {
-	defer func() {
-		e := recover()
-		if e != nil {
-			fmt.Println(i, j, n)
-		}
-	}()
 	distanceI, distanceJ := n.distanceMap[n.nodes[i]], n.distanceMap[n.nodes[j]]
 	return distanceI < distanceJ
 }

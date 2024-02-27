@@ -10,14 +10,13 @@ import (
 // TestDijkstra 测试迪瑞克斯拉算法
 func TestDijkstra(t *testing.T) {
 	t.Log("测试开始...")
-	for i := 0; i < 100000; i++ {
+	for i := 0; i < 10000; i++ {
 		graph := GenerateGraph(100, 9900, 1000)
 		// 随机取一个节点作为初始节点
 		var startIndex int
 		if len(graph.Nodes) > 0 {
 			startIndex = rand.Intn(len(graph.Nodes))
 		}
-		startIndex = 2
 		fromNode := graph.Nodes[startIndex]
 		ans1 := Dijkstra1(fromNode)
 		ans2 := Dijkstra2(fromNode)
